@@ -39,6 +39,8 @@ MYSQL-系统自带函数		|
 		* 获取当前日期,格式:2016-06-12
 	now();
 		* 获取当前时间,格式:2016-06-12 22:53:30
+	unix_timestamp()
+		* 返回unix时间戳
 
 	/** 字符串相关 **/
 	concat('1','2');
@@ -66,6 +68,10 @@ MYSQL-系统自带函数		|
 		* 比较俩字符串大小..根据字典排序咯.A > B
 		* 如果a > b 返回 1,反之返回 -1 相等返回 0
 	
+	find_in_set(str,list);
+		* 如果 str 出现在 list 中,返回 true
+			SELECT find_in_set(123,'123,456,788') as result; // 1
+
 	//加密相关
 	md5("被加密的字符");
 		* MD5加密函数,不可逆.平时用的
@@ -73,6 +79,18 @@ MYSQL-系统自带函数		|
 		* 专门供MYSQL用的
 	sha1("被加密的字符");
 		* 这个也是一个加密函数，可以用于项目
+	
+
+	//IP 转换
+	INET_ATON()
+		* 把IP字符串转换为int
+	
+	INET_NTOA()
+		* 把INT转换为字符串ip
+	
+	* ip转换函数的意义在于可以方便快速的检索
+		SELECT * FROM `table` WHERE `ip` BETWEEN INET_ATON('192.168.0.1') AND INET_NTOA('192.168.0.255');
+
 
 ------------------------
 MYSQL-自定义函数		|

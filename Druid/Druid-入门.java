@@ -121,3 +121,14 @@ spring配置				|
 ------------------------
 Durid-加密				|
 -----------------------	
+	1,执行加密,得到私钥,公钥,加密后的密文
+		java -cp druid-1.1.10.jar com.alibaba.druid.filter.config.ConfigTools [密码]
+	
+	2,配置
+		spring:
+		  datasource
+		    password: aAO2o86uTLOgw42z6xWJYb8Ta4F7OR2LzKnqcO46dYR5fccPIpuxLdvCznH1+MXRadtxsnmbCK4Masu8zE3QGg==
+		    public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAI5cG4UDYuGP7eljYApw4czFoORmMMCgN1JUs4GgAdcXS8130FbaUzK8Of2JvK1oT778EdmnBJaRAGEv/9vH0gMCAwEAAQ==
+
+		    filters: config
+		    connectionProperties: config.decrypt=true;config.decrypt.key=${spring.datasource.public-key}

@@ -120,3 +120,206 @@ doucment-获取所有的Cookie				|
 		}
 		return cookie;
 	}
+
+----------------------------------------
+监听文字复制事件,并且添加自己的数据		|
+----------------------------------------
+document.addEventListener('copy', function (event) {
+    var clipboardData = event.clipboardData || window.clipboardData;
+    if (!clipboardData) { 
+		return; 
+	}
+	//复制到的文字信息
+    var text = window.getSelection().toString();
+    if (text) {
+        event.preventDefault();
+		//修改原来的文字信息
+        clipboardData.setData('text/plain', text + '\n\njavaweb开发者社区版权所有');
+    }
+});
+
+----------------------------------------
+获取到粘贴的图片						|
+----------------------------------------
+document.addEventListener('paste', function(event) {
+	let items = event.clipboardData && event.clipboardData.items;
+	let file = null;
+	if (items && items.length) {
+		// 检索剪切板items
+		for (let i = 0; i < items.length; i++) {
+			if (items[i].type.indexOf('image') !== -1) {
+				file = items[i].getAsFile();
+				if(!file){
+					// 文件读取失败，可能是复制了文件系统的图片
+				}
+				break;
+			}
+		}
+	}
+	// 此时file就是剪切板中的图片文件
+});
+
+----------------------------------------
+获取到拖曳的图片						|
+----------------------------------------
+document.addEventListener('dragenter', function (event) {
+    event.preventDefault();
+});
+document.addEventListener('dragover', function (event) {
+    event.preventDefault();
+});
+document.addEventListener('drop', function (event) {
+    event.preventDefault();
+    let files = event.dataTransfer.files;
+    if (files) {
+    	// 获取到拖曳的图片
+    	console.log(files);
+    }
+});
+document.addEventListener('dragend', function (event) {
+    event.preventDefault();
+});
+
+----------------------------------------
+序列化表单为form/json字符串					|
+----------------------------------------
+function formEncode(form, format='form') {
+    if (!form || form.nodeName !== 'FORM') {
+        console.log(form + ' is not form element');
+        return;
+    }
+
+    const FORM_ELEMENTS = ['INPUT', 'TEXTAREA', 'SELECT'];
+    const map = new Map();
+    const queue = [...form.childNodes];
+    while (queue.length > 0) {
+        const element = queue.shift();
+        if (FORM_ELEMENTS.includes(element.nodeName)) {
+            const name = element.name;
+            if (!name) {
+                // 忽略没有定义name属性的表单项
+                continue;
+            }
+            if (element.nodeName === 'INPUT' && element.type === 'file') {
+                // 忽略文件表单项
+                console.log('ignore file input, please use \'new FormData(form);\'');
+                continue;
+            }
+            let value = null;
+            if (element.nodeName === 'SELECT') {
+                // 下拉框
+                for (const option of element.selectedOptions) {
+                    const optionValue = option.value;
+                    if (value == null) {
+                        value = optionValue;
+                    } else {
+                        if (Array.isArray(value)){
+                            value.push(optionValue);
+                        } else {
+                            value = [value, optionValue]
+                        }
+                    }
+                }
+            } else if (element.type === 'checkbox' || element.type === 'radio') {
+                // 多/单选框
+                if (element.checked){
+                    value = element.value;
+                }
+            } else {
+                // 普通文本框
+                value = element.value;
+            }
+            if (value == null){
+                continue;
+            }
+            if (map.has(name)) {
+                const existsVal = map.get(name);
+                if (Array.isArray(existsVal)) {
+                    if (Array.isArray(value)){
+                        existsVal.push(...value);
+                    } else {
+                        existsVal.push(value);
+                    }
+                } else {
+                    if (Array.isArray(value)){
+                        map.set(name, [existsVal, ...value]);
+                    } else {
+                        map.set(name, [existsVal, value]);
+                    }
+                }
+            } else {
+                map.set(name, value);
+            }
+        } else {
+            // 深度优先遍历
+            queue.unshift(...element.childNodes);
+        }
+    }
+
+    if (format === 'form'){
+        const params = new URLSearchParams();
+        map.forEach(function(value, key, map) {
+            if (Array.isArray(value)){
+                value.forEach(item => params.append(key, item));
+            } else {
+                params.append(key, value);
+            }
+        });
+        return params.toString();
+    } else if (format === 'json'){
+        let object = Object.create(null);
+        for (let [key, value] of map) {
+            object[key] = value;
+        }
+        return JSON.stringify(object);
+    } else {
+        throw `unknow format type: ${format}`;
+    }
+}
+const retVal = formEncode(document.querySelector('form'), 'json');
+console.log(retVal);
+
+----------------------------------------
+对数据进行html编码
+----------------------------------------
+/**
+ * 对数据进行html编码
+ * @param input
+ * @returns
+ */
+function htmlEscape(input) {
+	const div = document.createElement("div");
+	div.innerText = input;
+	return div.innerHTML;
+}
+
+
+----------------------------------------
+Array-分片上传文件
+----------------------------------------
+	const CHUNK_SIZE = 1024 * 500;  // 文件分片大小
+	function upload (file) {
+		if (!(file instanceof File)){
+			// TODO 不是文件对象
+			return ;
+		}
+		// 文件名称
+		const name = file.name;
+		// 文件类型
+		const type = file.type;
+		// 文件总大小
+		const size = file.size;
+		if (size == 0){
+			// TODO 空文件
+			return null;
+		}
+		// 总分片数量
+		let totalChunk = Math.ceil(size / CHUNK_SIZE);
+		
+		for (let i = 0; i < totalChunk; i ++){
+			let start = i * CHUNK_SIZE;
+	        let end = ((start + CHUNK_SIZE) >= size) ? size : start + CHUNK_SIZE;
+	        // 分片的文件
+	        let chunk = file.slice(start, end);
+		}
+	}

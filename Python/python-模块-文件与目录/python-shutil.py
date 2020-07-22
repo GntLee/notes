@@ -27,7 +27,7 @@ shutil-模块方法				|
 	copy2(src, dst)
 		* 拷贝文件和状态信息
 
-	str copytree(src, dst, symlinks=False, ignore=None)
+	str copytree((src, dst, symlinks=False, ignore=None, copy_function=copy2, ignore_dangling_symlinks=False, dirs_exist_ok=False)
 		* 递归的去拷贝文件夹,返回 dst 路径
 		* 关键字参数
 			symlinks

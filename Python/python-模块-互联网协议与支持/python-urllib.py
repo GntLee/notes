@@ -30,9 +30,14 @@ urllib-request				|
 				data		# 请求体,字节类型
 				timeout		# 超时时间
 		
-		urlretrieve(url,path)
+		urlretrieve(url,path,call,data)
 			* 打开url,并且把响应的数据保存到path
 			* 可以用于下载图片/视频的连接
+			* 参数
+				url 资源路径
+				path 下载路径
+				call 回调,可以通过该函数获取到文件大小,已下载大小等数据
+				data post到服务器提交的数据
 		
 		Request(url)
 			* 创建一个request对象,可以设置请求头等信息

@@ -58,4 +58,49 @@ Redis-key操作			|
 			* SETNX key value;		//同样,如果key已经存在那么不会执行写入操作,设置失败返回0,成功返回1
 			* MSETNX key value key value ...
 				* 如果有一个key是存在的,那么批量的插入都不会执行
+
+-----------------------
+Bitmap					|
+-----------------------
+	setbit key offset value
+	getbit key offset
+		* 对于bit位的设置和读取操作
+		* value只能是 0/1 ,可以用这东西是实现布隆过滤器算法
+		* 如果offset过大,则会在中间填充0(最长2^32, 512 MB)
+			long bits = 1L << 32;       // 4294967296
+			long mb = bits / 8 / 1024 / 1024;
+			System.out.println(bits + " bit=" + mb + " mb");    // 4294967296bit=512mb
+
+	
+	bitop [operations] [result] [key1] [keyn..]
+		* operations 表示,执行不同字符串之间的位操作
+		* result 表示计算结果的存储的key
+			AND
+			OR
+			XOR
+			NOT(该操作只能接受一个key,因为它是取反操作)
 		
+		* bitop OR result Monday Tuesday Wednesday Thursday Friday Saturday Sunday
+
+	bitcount key [start] [end]
+		* 返回指定key被设置为 1 的位的数量
+		* 可以指定开始和结束的位置
+
+
+	bitpos [key] [value]
+		* 返回第一个0或者1的位置
+
+	
+	# Redis 客户端的操作
+		RedisClient redisClient = RedisClient.create("redis://localhost:6379/0");
+		StatefulRedisConnection<String, String> connection = redisClient.connect();
+		RedisCommands<String, String> syncCommands = connection.sync();
+
+		syncCommands.setbit("users",1,1);
+		syncCommands.getbit("users",1);
+
+		syncCommands.bitopAnd("result","key1","key2");
+		syncCommands.bitopOr("result","key1","key2");
+		syncCommands.bitopXor("result","key1","key2");
+		syncCommands.bitopNot("result","key1");
+	

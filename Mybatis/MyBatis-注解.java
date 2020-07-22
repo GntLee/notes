@@ -22,3 +22,72 @@ MyBatis-注解				|
 	
 	@Result
 	@Results
+
+----------------------------
+MyBatis-demo				|
+----------------------------
+@Repository
+public interface FooMapper extends BaseMapper<FooEntity>{
+	
+	class FooSqlProvider extends BaseSqlProvider<FooEntity> {
+		
+	}
+	
+    //===================================
+	//获取自增主键
+	@Options(useGeneratedKeys = true,keyProperty = "fooId",keyColumn = "foo_id")					
+	@InsertProvider(type = FooSqlProvider.class,method = "create")
+	//也可以获取自增主键
+//	@SelectKey(before = false,keyColumn = "foo_id",keyProperty = "fooId",resultType = Integer.class,statement = "SELECT LAST_INSERT_ID();")
+	int create(FooEntity foo);
+
+
+    //===================================
+	@SelectProvider(type = FooSqlProvider.class,method = "queryByPrimaryKey")
+	@ResultMap(value = "BASE_RESULT_MAP")
+	FooEntity queryByPrimaryKey(Serializable primaryKey);
+
+    @SelectProvider(type = FooSqlProvider.class,method = "queryByParamSelective")
+    @ResultMap(value = "BASE_RESULT_MAP")
+	FooEntity queryByParamSelectiveUnique(FooEntity fooEntity);
+	
+	@SelectProvider(type = FooSqlProvider.class,method = "queryByParamSelective")
+	@Results(id = "BASE_RESULT_MAP",value = {
+		@Result(id = true,column = "foo_id",property = "fooId"),
+		@Result(column = "create_date",property = "createDate"),
+		@Result(column = "modify_date",property = "modifyDate"),
+		@Result(column = "create_user",property = "createUser"),
+		@Result(column = "status",property = "status"),
+		@Result(column = "sorted",property = "sorted"),
+		@Result(column = "remark",property = "remark"),
+	})
+	List<FooEntity> queryByParamSelective(FooEntity foo);
+
+    //===================================
+	@UpdateProvider(type = FooSqlProvider.class,method = "updateByPrimaryKeySelective")
+	int updateByPrimaryKeySelective(FooEntity foo);
+
+    @UpdateProvider(type = FooSqlProvider.class,method = "updateByPrimaryKey")
+	int updateByPrimaryKey(FooEntity foo);
+
+    //===================================
+	@DeleteProvider(type = FooSqlProvider.class,method = "deleteByPrimaryKey")
+	int deleteByPrimaryKey(Serializable deleteByPrimaryKey);
+	
+	@DeleteProvider(type = FooSqlProvider.class,method = "deleteByParamSelective")
+	@ResultMap(value = "BASE_RESULT_MAP")
+	int deleteByParamSelective(FooEntity fooEntity);
+	
+	@SelectProvider(type = FooSqlProvider.class,method = "queryByParamSelective")
+	@ResultMap(value = "BASE_RESULT_MAP")
+	PageList<FooEntity> queryByPage(FooEntity fooEntity,PageBounds pageBounds);
+}
+
+
+
+
+# Provider的接口支持一个参数
+	ProviderContext
+		private final Class<?> mapperType; // mapper接口
+		private final Method mapperMethod; // mapper方法
+

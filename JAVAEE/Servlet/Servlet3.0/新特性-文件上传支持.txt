@@ -42,6 +42,14 @@ Part
 		* 获取上传文件的大小
 	> write(String filename);
 		* 保存文件到指定的路径
+
+	> getSubmittedFileName()
+		* 获取文件的名称,就是文件在磁盘系统中的名称
+		* servlet3.1新特性
+
+	> delete()
+		* 删除文件,包括删除缓存在磁盘的文件
+
 	
 四,得到Part
 Part p = request.getPart("name属性");
@@ -56,10 +64,16 @@ Collection<?> c = request.getParts();
 	> getName();//获取表单项名称
 	> write(Strin path);//写入指定路径
 	>  ... ...自己看上面
+
 2,默认Servlet是不是支持使用上传组键的,我们需要给Servlet添加一个注解
-	> @MultipartConfig
+	@MultipartConfig
+	
 	* 不带任何参数,直接复制上去就好
+	* 该注解也有一些属性,可以控制上传的文件的大小,本地序列化的目录,请求体的总大小等等
+
 
 六,这东西没有提供获取上传文件名称的方法
 	* 这个需要我们自己从Content-Disposition头中获取出来,再截取
+	* 3.1 版本以后带有了这个API
+		getSubmittedFileName()
 	

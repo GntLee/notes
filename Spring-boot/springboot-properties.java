@@ -5,8 +5,14 @@ Spring boot-配置项				|
 		server.port=80
 			# WEB监听端口
 
-		server.context-path=/
+		server.servlet.context-path=/
 			# WEB访问路径
+		
+		server.tomcat.basedir
+			# 设置tomcat的临时目录
+			# 在linux系统中,springboot应用服务再启动(java -jar 命令启动服务)的时候,会在操作系统的/tmp目录下生成一个tomcat*的文件目录
+			# 上传的文件先要转换成临时文件保存在这个文件夹下面
+			# 由于临时/tmp目录下的文件,在长时间(10天)没有使用的情况下,就会被系统机制自动删除掉,所以如果系统长时间无人问津的话,就可能导致:The temporary upload location [/tmp/tomcat.1337767218595042057.80/work/Tomcat/localhost/ROOT] is not...
 	
 	//编码处理
 		server.tomcat.uri-encoding=UTF-8
@@ -44,3 +50,8 @@ Spring boot-配置项				|
 	//导入外部配置文件
 		spring.profiles.include[0]=datasource
 		spring.profiles.include[1]=redis
+	
+	//上传配置
+		spring.servlet.multipart.max-file-size=30MB
+		spring.servlet.multipart.max-request-size=30MB
+		spring.servlet.multipart.enabled=true

@@ -54,8 +54,20 @@ json-模块函数			|
 				* 指定 转换 obj 对象时,的转换函数
 				* 如果参数是一个不能进行JSON转换的对象,那么就会调用 default 指定的函数来进行转换操作,返回结构就是该函数返回的字符串
 				* 并且会把 obj 对象传递给该函数的第一个参数
+			separators
+				* 指定切割??,应该是格式化json的分隔符,和:
+				* separators=(', ', ': ')	,就是在json的 ',' 后添加一个空格,':' 后也添加了一个空格
+			
+			indent
+				* 间距
+			sort_keys
+				* 是否要对key进行排序
 			ensure_ascii
 				* 默认值 True,是否把中文转换为 Unicode 编码
+		
+		* 序列化格式化后的JSON
+			data = {'name':'KevinBlandy'}
+			json.dumps(data, sort_keys=True, indent=4, separators=(',', ':'), ensure_ascii=False)
 
 	
 	str dump(obj,f)

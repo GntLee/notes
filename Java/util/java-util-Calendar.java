@@ -27,3 +27,8 @@ java.util.Calendar		 |
 		long getTimeInMillis()
 			|-转换为毫秒值
 		
+		getActualMaximum(int field)
+			|-获取指定'数据的'的最大值
+			|-数据可以是月份,(获取指定月最多只有多少天)
+		getActualMinimum(in field)
+			|--获取指定'数据的'的最小值

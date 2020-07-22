@@ -38,3 +38,19 @@ Redis-安装				|
 			* 直接双击redis-server.exe 启动服务
 			* 加载配置文件启动服务:redis-server.exe redis.conf
 		* 双击redis-cli 启动客户端
+
+-----------------------
+Redis-4.0.x安装			|
+-----------------------
+	1,下载源码解压
+	2,安装依赖
+		yum install -y gcc gcc-c++
+
+	3,进入源码目录执行编译安装
+		make PREFIX=/usr/local/redis install
+			
+		PREFIX,指定安装目录
+	
+	4,复制配置文件到安装目录
+		cp *.conf /usr/local/redis/conf/
+

@@ -53,3 +53,61 @@ Spring-Boot 注解			|
 	
 
 
+	@AutoConfigureAfter
+		# 只有两个属性
+			Class<?>[] value() default {};
+			String[] name() default {};
+		
+		# 用在自动配置类上面,表示该自动配置类需要在另外指定的自动配置类配置完之后
+		# 例如 Mybatis 的自动配置类,需要在数据源自动配置类之后
+			@AutoConfigureAfter(DataSourceAutoConfiguration.class)
+			public class MybatisAutoConfiguration {
+		
+	@AutoConfigureBefore
+		# 同上,通过该注解指定的配置类,应该要在当前类之后配置
+	
+
+	@ImportResource
+		# 属性
+			String[] value() default {};
+			String[] locations() default {};
+			Class<? extends BeanDefinitionReader> reader() default BeanDefinitionReader.class;
+	
+		# 通过该注解导入spring的xml配置文件
+		# 支持从文件系统或者classpath下加载
+	
+	
+	@PropertySource
+		# 加载外部配置文件
+			String name() default "";
+			String[] value();
+			boolean ignoreResourceNotFound() default false;
+			String encoding() default "";
+			Class<? extends PropertySourceFactory> factory() default PropertySourceFactory.class;
+
+		# 跟标签加载一样
+			<context:property-placeholder location="classpath:jdbc.properties" />
+
+		# 支持从不同的源加载数据
+			@PropertySource(value = { "file:c:/application.properties","classpath:app.properties"})
+
+	@Profile
+		# 只有一个属性
+		# 可以标识在类,方法上,指定一个或者多个激活的配置文件名
+			String[] value();
+		# 关联的配置
+			spring.profiles.active=dev
+		# 使用demo
+			@Profile("dev")  // 只有激活了dev配置文件时,才会加载该controller
+			@RestController
+			public class ProdController
+		
+		# 在程序中, 通过代码来判断当前的环境
+			@Autowired
+			Environment environment;
+
+			// 构建2个运行环境
+			Profiles profiles = Profiles.of("dev", "test");
+
+			// 判断当前环境, 是否在指定的运行环境中
+			boolean accept = environment.acceptsProfiles(profiles);

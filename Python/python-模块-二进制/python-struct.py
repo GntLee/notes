@@ -41,9 +41,7 @@ struct-Struct				|
 ---------------------------
 struct-fmt对照表			|
 ---------------------------
-	----------------------------------------------------------------------
 	Format	C Type				Python type		Standard size	Notes		
-	----------------------------------------------------------------------
 	x		pad byte			no value	 	 
 	c		char				bytes of length 1				1	 
 	b		signed char			integer			1				(1),(3)
@@ -66,25 +64,48 @@ struct-fmt对照表			|
 	p		char[]				bytes	 	 
 	P		void *				integer	 						(6)
 
+---------------------------
+网络字节序					|
+---------------------------
+	@	本机顺序
+	=	原生顺序
+	<	little-endian,小端
+	>	big-endian,大端
+	!	与>相同
 
 
 ---------------------------
 struct-demo					|
 ---------------------------
-import struct
+	# 中文的编码
+		import struct
 
-message = '卧槽。。。这个就算是带中文也没问题的哟。。'
+		message = '卧槽。。。这个就算是带中文也没问题的哟。。'
 
-bin_message = message.encode(encoding='utf_8', errors='strict')
-# 
-format = 'II%ds'%(len(bin_message))
+		bin_message = message.encode(encoding='utf_8', errors='strict')
+		# 
+		format = 'II%ds'%(len(bin_message))
 
-packager = struct.Struct(format)
+		packager = struct.Struct(format)
 
-package = packager.pack(5,15,bin_message)
+		package = packager.pack(5,15,bin_message)
 
-unpackage = packager.unpack(package)
+		unpackage = packager.unpack(package)
 
-print(unpackage)
+		print(unpackage)
 
-print(unpackage[2].decode(encoding='utf_8', errors='strict'))
+		print(unpackage[2].decode(encoding='utf_8', errors='strict'))
+
+	
+	# 编码和解码函数
+		# 对数据进行编码,添加一个4字节长度的消息长度头
+		def encode(data):
+			data = bytes(data,'UTF_8')
+			length = len(data)
+			return struct.pack('I%ds'%(length),length,data)
+		
+		
+		# 对数据进行解码,分离出来数据和长度头
+		def decode(data):
+			length = len(data) - 4 # 消息体的长度要减去消息头的长度
+			return struct.unpack('I%ds'%(length),data)

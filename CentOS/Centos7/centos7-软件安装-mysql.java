@@ -157,10 +157,13 @@ http://blog.csdn.net/xyang81/article/details/51759200
 1,下载
 	https://dev.mysql.com/downloads/repo/yum/
 	Red Hat Enterprise Linux 7 / Oracle Linux 7 (Architecture Independent), RPM Package		25.1K	
-	(mysql57-community-release-el7-11.noarch.rpm)	
+	(mysql57-community-release-el7-11.noarch.rpm)
+
+	* mysql 8
+		https://repo.mysql.com//mysql80-community-release-el7-1.noarch.rpm
 
 2,安装yum源
-	yum localinstall mysql57-community-release-el7-11.noarch.rpm
+	yum localinstall -y mysql57-community-release-el7-11.noarch.rpm
 
 	* 查看yum源是否安装成功/etc/yum.repos.d/mysql-community.repo
 		yum repolist enabled | grep "mysql.*-community.*"
@@ -188,7 +191,7 @@ http://blog.csdn.net/xyang81/article/details/51759200
 		enabled=0		//表示不安装
 
 3,安装mysql服务器
-	yum install mysql-community-server
+	yum install -y mysql-community-server
 
 4,启动mysql服务
 	systemctl start mysqld
@@ -221,21 +224,75 @@ http://blog.csdn.net/xyang81/article/details/51759200
 6,授权用户在远程登录
 	GRANT ALL PRIVILEGES ON *.* TO 'KevinBlandy'@'%' IDENTIFIED BY 'pass' WITH GRANT OPTION; 
 	
-	*.*			任意数据库下的任意数据表
-	KevinBlandy 用户名
-	%			任意ip
-	pass		密码
+		*.*			任意数据库下的任意数据表
+		KevinBlandy 用户名
+		%			任意ip
+		pass		密码
+	
+	flush privileges;
+	
+	# mysql 8的需要通过ROLE机制来进行授权
+		1,创建1个或者多个角色
+			CREATE ROLE 'app_developer', 'app_read', 'app_write';
+		
+		2,对创建的角色进行授权
+			* 语法 
+				GRANT [权限] ON [db].[tb] TO [角色]
+			
+			* 权限是枚举,可以有多个,或者直接用 ALL 代替,表示所有权限
+				SELECT,INSERT, UPDATE, DELETE
+			
+			* demo
+				GRANT ALL		ON app_db.* TO 'app_developer';
+				GRANT SELECT	ON app_db.* TO 'app_read';
+				GRANT INSERT, UPDATE, DELETE ON app_db.* TO 'app_write';
+		
+		3,创建用户
+			CREATE USER 'KevinBlandy'@'%' IDENTIFIED BY '123456';
+		
+		4,授权角色到用户
+			* 语法
+				GRANT [角色] TO [用户名]@[ip]
+			
+			* demo
+				GRANT 'app_developer' TO 'dev1'@'localhost';
+					* 授权用户在指定的ip可以使用一个角色
+				GRANT 'app_read' TO 'read_user1'@'localhost', 'read_user2'@'localhost';
+					* 授权用户在不同的IP可以使用不同的角色
+				GRANT 'app_read', 'app_write' TO 'rw_user1'@'localhost';
+					* 授权用户在一个ip可以使用多个角色
+
+		# 通用
+			 CREATE ROLE 'app_developer';
+			 GRANT ALL ON *.* TO 'app_developer';
+			 CREATE USER 'KevinBlandy'@'%' IDENTIFIED BY '123456';
+			 GRANT 'app_developer' TO 'KevinBlandy'@'%';
+
+
 
 7,设置默认编码
 	* 编辑:vim /etc/my.cnf,在 [mysqld] 配置项中添加配置
 		character_set_server=utf8
 		init_connect='SET NAMES utf8'
+my.cnf-----------------------------------------
+[client]
+default-character-set = utf8mb4
+
+[mysql]
+default-character-set = utf8mb4
+
+[mysqld]
+character-set-server = utf8mb4
+collation-server = utf8mb4_general_ci
+-----------------------------------------------
+
 	
 	* 重启mysql服务
 		systemctl restart mysqld
 
 	* 登录,查看编码
 		show variables like '%character%';
+
 
 
 8,默认配置文件路径
@@ -260,3 +317,23 @@ http://blog.csdn.net/xyang81/article/details/51759200
 	* 设置开机启动
 		systemctl enable mysqld
 		systemctl daemon-reload
+
+10, 卸载
+
+	* 查看安装好的mysql相关的服务
+		rpm -qa | grep -i mysql
+	
+	* 把检索到所有mysql服务都执行卸载：yum remove -y xxx
+		yum remove -y mysql-community-client-5.7.27-1.el7.x86_64
+		yum remove -y mysql57-community-release-el7-11.noarch
+		yum remove -y mysql-community-libs-5.7.27-1.el7.x86_64
+		yum remove -y mysql-community-server-5.7.27-1.el7.x86_64
+		yum remove -y mysql-community-common-5.7.27-1.el7.x86_64
+	
+	
+	* 删除遗留的数据目录
+		rm -rf /var/lib/mysql
+	
+
+
+ 

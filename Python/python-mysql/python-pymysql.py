@@ -31,6 +31,17 @@ pymysql				 |
 				* 可选值
 					pymysql.cursors.DictCursor	
 						* 结果集会被映射为  dict
+		
+		* 使用dict封装参数
+			db_config = {
+				'host': '127.0.0.1',
+				'port': 3306,
+				'user': 'root',
+				'password': 'root',
+				'db': 'user',
+				'charset': 'utf8mb4',
+				'cursorclass': pymysql.cursors.DictCursor
+			}
 
 ---------------------
 Connection			 |
@@ -120,6 +131,18 @@ db_pass = 'KevinBlandy_mysql'
 db_database = 'demo'
 db_charset = 'utf8mb4'
 db_cursorclass = pymysql.cursors.DictCursor
+
+'''
+config = {
+    'host':'127.0.0.1',
+    'port' : 3306,
+    'user' : 'root',
+    'passwd' : 'root',
+    'database' : 'springcloud',
+    'charset' : 'utf8mb4',
+    'cursorclass' : pymysql.cursors.DictCursor
+}
+'''
 
 # 创建连接对象
 conn = pymysql.connect(host=db_host,port=db_port,user=db_user,passwd=db_pass,db=db_database,charset=db_charset,cursorclass=db_cursorclass)

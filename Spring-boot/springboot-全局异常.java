@@ -116,3 +116,19 @@
 				return ERROR_PATH;
 			}
 		}
+	
+	org.springframework.web.util.WebUtils
+
+	static final String JAVAX_SERVLET_ERROR_SERVLET_NAME = "javax.servlet.error.servlet_name";
+    static final String JAVAX_SERVLET_ERROR_EXCEPTION = "javax.servlet.error.exception";
+    static final String JAVAX_SERVLET_ERROR_REQUEST_URI = "javax.servlet.error.request_uri";
+    static final String JAVAX_SERVLET_ERROR_MESSAGE = "javax.servlet.error.message";
+    static final String JAVAX_SERVLET_ERROR_EXCEPTION_TYPE = "javax.servlet.error.exception_type";
+    static final String JAVAX_SERVLET_ERROR_STATUS_CODE = "javax.servlet.error.status_code";
+
+	Throwable throwable = (Throwable) request.getAttribute(JAVAX_SERVLET_ERROR_EXCEPTION);
+	Integer statusCode = (Integer) request.getAttribute(JAVAX_SERVLET_ERROR_STATUS_CODE);
+	String errorUri = (String) request.getAttribute(JAVAX_SERVLET_ERROR_REQUEST_URI);
+	String servletName = (String) request.getAttribute(JAVAX_SERVLET_ERROR_SERVLET_NAME);
+	String errorMessage = (String) request.getAttribute(JAVAX_SERVLET_ERROR_MESSAGE);
+	Class<? extends Throwable> throwableType = (Class<? extends Throwable>) request.getAttribute(JAVAX_SERVLET_ERROR_EXCEPTION_TYPE);

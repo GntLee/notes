@@ -17,6 +17,13 @@ java.lang.Runtime			 |
 		
 		int availableProcessors();
 			* 返回到虚拟机的最大可用的处理器数量,不会小余一个
+
+		void addShutdownHook(Thread hook) 
+			* 添加一个关闭回调,收到系统退出指令的时候,会执行该线程
+			* 可以添加多个,但是没法保证执行顺序
+			* 如果JVM崩溃,可能不会执行
+			* 不能在回调中调用 : System.exit(),否则会卡住
+
 	
 	# Process
 		void prop.destroy();

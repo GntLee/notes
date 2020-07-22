@@ -40,3 +40,12 @@ Locale locale = request.getLocale();//返回的就是zn-CH的Locale对象,是由客户端提供
 ResourceBundle rb = ResourceBundle.getBundle("res",locale);
 //这就是获取资源文件中userName的资源！因为Locale是中文,所以加载出来的东西就是中文.如果Locale是英文,那么加载出来就是的英文
 System.out.println(rb.getString("userName"));//打印出来的就是：用户名
+
+
+获取所有支持的国家地区
+	Locale[] localeList = Locale.getAvailableLocales();
+	// 遍历数组的每个元素，依次获取所支持的国家和语言
+	for (int i = 0; i < localeList.length; i++) {
+	    // 打印出所支持的国家和语言
+	    System.out.println(localeList[i].getDisplayCountry() + "=" + localeList[i].getCountry() + " " + localeList[i].getDisplayLanguage() + "=" + localeList[i].getLanguage());
+	}

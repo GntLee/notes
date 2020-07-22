@@ -24,5 +24,28 @@ java.reflect.Method	 |
 	 Class<?> getReturnType()
 		* 返回 return 的Class类类型
 	
+	boolean isBridge()
+		* 是否是泛型桥接方法
+		* 桥接方法是 JDK 1.5 引入泛型后,为了使Java的泛型方法生成的字节码和 1.5 版本前的字节码相兼容
+		* 由编译器自动生成的方法
+			interface Parent<T> {
+				void foo(T t);
+			}
 
+			class Sub implements Parent<String> {
+				@Override
+				public void foo(String s) {
+					System.out.println(s);
+				}
+			//	JVM编译器生成的桥接方法
+			//	public void foo(Object s) {
+			//		this.foo((String) s);
+			//	}
+			}
+
+			Method bridgeMethod = Sub.class.getMethod("foo",Object.class);
+			System.out.println(bridgeMethod.isBridge());		// true
+
+			Method method = Sub.class.getMethod("foo",String.class);
+			System.out.println(method.isBridge());				// false
 	

@@ -5,12 +5,12 @@ socket							|
 --------------------------------
 socket-模块属性					|
 --------------------------------
-	* 网络层
+	* 网络层属性
 		socket.AF_UNIX		# 本地(Unix/Linux系统才有该属性,适用于不同进程之间的通信)
 		socket.AF_INET      # IPV4
 		socket.AF_INET6     # IPV6
 	
-	* 传输层
+	* 传输层属性
 		socket.SOCK_STREAM  
 			* tcp
 
@@ -24,7 +24,20 @@ socket-模块属性					|
 		
 		socket.SOCK_RDM
 			* 可靠的UDP,保证交付消息,但是不保证交付顺序
-
+	
+	* 协议
+		socket.IPPROTO_TCP = 6
+		socket.IPPROTO_IP = 0
+		socket.IPPROTO_UDP = 17
+		socket.IPPROTO_ICMP = 1
+		socket.IPPROTO_RAW = 255
+		
+	
+	* socket选项
+		socket.IP_HDRINCL
+		socket.SOL_SOCKET
+			socket.SO_BROADCAST
+			socket.SO_REUSEADDR
 	
 --------------------------------
 socket-模块方法					|
@@ -39,6 +52,30 @@ socket-模块方法					|
 	
 	str gethostname()
 			* 获取本地主机名
+	
+	float getdefaulttimeout()
+	None setdefaulttimeout()
+			* 读取/设置全局的连接超时时间
+		
+	socketpair()
+	fromfd()
+	fromshare()
+	gethostname()
+	gethostbyname()
+	gethostbyaddr()
+	getservbyname()
+	getprotobyname()
+		* 根据协议名称获取协议'对象'
+
+	ntohs()
+	ntohl()
+	htons()
+	htonl() 
+	inet_aton()
+	inet_ntoa()
+
+	socket create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,source_address=None) 
+
 
 --------------------------------
 socket-socket					|
@@ -68,6 +105,9 @@ socket-socket					|
 			* 否则将套接字设为阻塞模式(默认)
 			* 非阻塞模式下,如果调用 recv() 没有发现任何数据,或 send() 调用无法立即发送数据,那么将引起 socket.error 异常
 		
+		bool getblocking()
+			* 获取当前的IO模式，是否是阻塞的。
+		
 		tuple accept()
 			* 阻塞线程,直到有客户端的连接,就会返回 tuple
 			* 第一个元素就是,客户端的 socket 对象,第二个元素,又是一个元组
@@ -87,7 +127,10 @@ socket-socket					|
 		None setsockopt()
 			* 设置 socket 的一些属性(例如:端口重用)
 			* demo
-				setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1) # 设置端口可以重用
+				setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1) 
+					# 设置端口可以重用
+				setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST,1)
+					# 设置UDP为广播模式
 
 		int send(bytes)
 			* 发送数据到目标,不一定一次性就把数据发送完毕,应该使用 sendall()
@@ -156,6 +199,4 @@ socket-socket					|
 		makefile()	
 			* 创建一个与该套接字相关连的文件
 	
-		
-
 		

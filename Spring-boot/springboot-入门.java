@@ -22,7 +22,7 @@ Spring-Boot 入门			|
 		<parent>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-parent</artifactId>
-			<version>1.5.8.RELEASE</version>
+			<version>2.2.5.RELEASE</version>
 			<relativePath/> <!-- lookup parent from repository -->
 		</parent>
 
@@ -30,18 +30,31 @@ Spring-Boot 入门			|
 			<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 			<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 			<java.version>1.8</java.version>
+			
+			<!-- 打包的时候，跳过测试 -->
+			<skipTests>true</skipTests>
 		</properties>
 
 		<dependencies>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-web</artifactId>
+				<artifactId>spring-boot-starter-test</artifactId>
+				<scope>test</scope>
 			</dependency>
 
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-test</artifactId>
-				<scope>test</scope>
+				<artifactId>spring-boot-starter-web</artifactId>
+				<exclusions>
+					<exclusion>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-starter-tomcat</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-undertow</artifactId>
 			</dependency>
 		</dependencies>
 
@@ -50,18 +63,28 @@ Spring-Boot 入门			|
 				<plugin>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
 					<configuration>
-						<source>1.8</source>
-						<target>1.8</target>
-						<encoding>UTF-8</encoding>
+						<executable>true</executable>
+						<!-- 打包时,一起打包本地jar(scope=system) -->
+						<includeSystemScope>true</includeSystemScope>
 					</configuration>
 				</plugin>
 			</plugins>
 		</build>
+	
+	# 如果需要自定义 parent模块,但是又想继承springboot的依赖
+		<dependencyManagement>
+			<dependencies>
+				<!-- Spring Boot parent.pom 的父级依赖,该依赖定义了框架依赖的所有版本信息 -->
+				<dependency>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-dependencies</artifactId>
+					<version>${spring-boot.version}</version>
+					<type>pom</type>
+					<scope>import</scope>
+				</dependency>
+			</dependencies>
+		</dependencyManagement>
 
 	# 主函数,直接启动代码
 		import org.springframework.boot.SpringApplication;
@@ -71,8 +94,20 @@ Spring-Boot 入门			|
 		@SpringBootApplication
 		public class ParkApplication extends SpringBootServletInitializer{
 
-			public static void main(String[] args){
-				SpringApplication.run(ParkApplication.class,args);
+			public static ApplicationContext applicationContext = null;
+	
+			public static void main(String[] args) {
+
+				String configLocation = String.join(File.separator, "file:${user.home}", "app", "config", "");
+				
+				System.setProperty(ConfigFileApplicationListener.CONFIG_ADDITIONAL_LOCATION_PROPERTY, configLocation);
+				
+				SpringApplication springApplication = new SpringApplication(ParkApplication.class);
+				springApplication.addListeners(new ApplicationPidFileWriter());
+				
+				applicationContext = springApplication.run(args);
+				
+				// SpringApplication.exit(applicationContext, () -> 0);
 			}
 		}
 

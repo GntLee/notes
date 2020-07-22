@@ -68,6 +68,8 @@ resultMap-子标签				|
 				* DB字段的 前缀
 			resultMap
 				* 结果集映射
+			select
+				* 可以指定SQL语句或者namespace的检索
 
 	<collection>
 		# 一对多的构造
@@ -76,6 +78,8 @@ resultMap-子标签				|
 				* DB字段的 前缀
 			resultMap
 				* 结果集映射
+			select
+				* 可以指定SQL语句或者namespace的检索
 
 	<discriminator>
 		# 根据指定字段的值来决定使用哪个 resultType / resultMap 中属性进行映射

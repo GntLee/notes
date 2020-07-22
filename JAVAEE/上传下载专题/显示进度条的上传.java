@@ -20,7 +20,7 @@ Jquery-异步						 |
 			if(myXhr.upload){			
 				//监听上传属性的上传事件,每次上传事件都会执行 progressHandlingFunction
 				myXhr.upload.addEventListener('progress',progressHandlingFunction, false);
-				//myXhr.upload.progress = function(){}			也可以
+				//myXhr.upload.onprogress = function(){}			也可以
 			}
 			//返回给 $.ajax 使用
 			return myXhr;
@@ -64,7 +64,7 @@ Jquery-异步						 |
 	if(xhr.upload){
 		//监听上传属性的上传事件,每次上传事件都会执行 progressHandlingFunction
 		xhr.upload.addEventListener('progress',progressHandlingFunction, false);
-		//xhr.upload.progress = function(){}			也可以
+		//xhr.upload.onprogress = function(){}			也可以
 	}
 	//执行上传
 	xhr.send(formData);

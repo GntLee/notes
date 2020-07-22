@@ -5,14 +5,10 @@ FastJson-整合springmvc|
 		FastJsonHttpMessageConverter
 		FastJsonHttpMessageConverter4
 
-	# 支持JSONP的转换器
-		FastJsonpHttpMessageConverter4
-		* 需要配置  FastJsonpResponseBodyAdvice 来指定JSONP的请求参数
-
 
 	  <mvc:annotation-driven>
         <mvc:message-converters register-defaults="true">
-            <bean class="com.alibaba.fastjson.support.spring.FastJsonpHttpMessageConverter4">
+            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
                 <property name="supportedMediaTypes">
                     <list>
                         <value>application/json</value>
@@ -38,13 +34,40 @@ FastJson-整合springmvc|
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
+
+	# 代码配置
+		FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter();
+
+		FastJsonConfig fastJsonConfig = new FastJsonConfig();
+		fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
+		fastJsonConfig.setCharset(StandardCharsets.UTF_8);
+		fastJsonConfig.setSerializerFeatures(SerializerFeature.DisableCircularReferenceDetect);
+
+		fastJsonHttpMessageConverter.setSupportedMediaTypes(Arrays.asList(MediaType.APPLICATION_JSON_UTF8));
+		fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig);
+
+		return new HttpMessageConverters(fastJsonHttpMessageConverter);
 	
-	<!--  jsonp 跨域 支持-->
-    <bean class="com.alibaba.fastjson.support.spring.FastJsonpResponseBodyAdvice">
-        <constructor-arg>
-            <list>
-                <value>callback</value>
-                <value>jsonp</value>
-            </list>
-        </constructor-arg>
-    </bean>
+--------------------
+FastJson-跨域支持	|
+--------------------
+	# 添加 JSONPResponseBodyAdvice
+		@Bean
+		public JSONPResponseBodyAdvice jSONPResponseBodyAdvice() {
+			return new JSONPResponseBodyAdvice();
+		}
+	
+	# Jsonp接口方法，添加注解 @ResponseJSONP
+		@RequestMapping("/test")
+		@Controller
+		public class TestController {
+			
+			@GetMapping("/jsonp")
+			@ResponseJSONP(callback = "callback")
+			@ResponseBody
+			public Object jsonp() {
+				return Message.success("Hello");
+			}
+		}
+
+		* 该注解就一个属性：callback ，用于指定客户端提供的回调参数

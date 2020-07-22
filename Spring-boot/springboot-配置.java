@@ -121,8 +121,9 @@ Spring-Boot 外部配置		|
 			> 配置日志文件地址
 				logging.file=d:/mylog/log.log
 			> 配置日志输出级别
+				logging.level.root=INFO
 				logging.level.org.springframework.web=DEBUG		
-				logging.level.*=INFO
+				
 
 		* 引用外部文件的配置(推荐使用)
 			> spring boot 会默认加载:classpath:logback-spring.xml或者classpath:logback-spring.groovy
@@ -156,3 +157,75 @@ Spring-Boot 外部配置		|
 			|-application-datasource.properties
 		spring.profiles.include[1]=redis
 			|-application-redis.properties
+
+	# bootstrap.yml
+		* bootstrap.yml(bootstrap.properties)用来程序引导时执行,应用于更加早期配置信息读取
+
+		* 可以使用来配置application.yml中使用到参数等
+
+		* application.yml(application.properties) 应用程序特有配置信息,可以用来配置后续各个模块中需使用的公共参数等
+
+		* bootstrap.yml 先于 application.yml 加载
+
+		* 可以通过设置来禁用bootstrap
+			spring.cloud.bootstrap.enabled=false
+	
+
+------------------------
+多环境配置				|
+------------------------
+	# application.properties属性文件会被SpringBoot应用自动加载, 而且有一个加载顺序
+		1. 当前目录的/config子目录下
+		2. 当前目录下
+		3. classpath目录的/config子目录下
+		4. classpath目录下
+
+		* private static final String DEFAULT_SEARCH_LOCATIONS = "classpath:/,classpath:/config/,file:./,file:./config/";
+		* 列表高的配置, 覆盖列表低的配置
+	
+	# 通过Environment属性 spring.config.name 可以自定义applicaiton.properties文件的名称
+		ConfigFileApplicationListener.CONFIG_NAME_PROPERTY = "spring.config.name";
+	
+	# 通过Environment属性 spring.config.location 自定义 applicaiton.properties 文件的位置
+		ConfigFileApplicationListener.CONFIG_LOCATION_PROPERTY = "spring.config.location";
+
+	# 通过Environment属性 spring.config.additional-location 自定义 applicaiton.properties 文件的位置
+		ConfigFileApplicationListener.CONFIG_ADDITIONAL_LOCATION_PROPERTY="spring.config.additional-location";
+
+		* spring.config.location 会覆盖默认的搜索路径
+		* 它只是追加, 追加的位置是在默认的位置之前
+	
+	# 这几个配置要在应用启用之前配置, 所以需要将其配置到'系统环境变量'或者'系统参数'或者'命令行参数'中优先读取
+
+
+	# 指定配置文件的文件夹
+		* 生产环境,和开发环境的配置文件不一定非要存储在项目中
+		* 可以存储在本地磁盘, 使用配置设置
+			ConfigFileApplicationListener.CONFIG_ADDITIONAL_LOCATION_PROPERTY="spring.config.additional-location";
+		
+		* 可以在代码里面设置, 如果有多个值, 使用逗号分隔
+			String configLocation = "file:${user.home}" + File.separator + "config" + File.separator;
+			System.setProperty(ConfigFileApplicationListener.CONFIG_ADDITIONAL_LOCATION_PROPERTY, configLocation);
+
+
+			System.setProperty("spring.config.additional-location", "file:${user.home}/config/,file:${user.home}/config-dev/");
+
+		
+		* 支持使用 spel 表达式
+		* 建议项目工程中不要存储生产环境的相关配置, 生产环境的配置, 通过 'spring.config.additional-location' 制定存储在生产服务器的磁盘上
+	
+
+------------------------
+Environment				|
+------------------------
+	# org.springframework.core.env.Environment
+	# 该对象在IOC,表示当前spring的所有配置信息
+		
+		@Autowired
+		private Environment env;
+		
+		//获取当前激活的的文件名称,也就是:spring.profiles.active 指定的文件
+		String[] profiles = env.getActiveProfiles();
+
+		//可以从配置中获取数据
+		String dbPass = env.getProperty("bbs.dbPassowrd");

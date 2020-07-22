@@ -6,6 +6,7 @@ beautifulsoup			|
 
 	* ÎÄµµ
 		http://beautifulsoup.readthedocs.io/zh_CN/latest/
+		https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/
 	
 
 ------------------------

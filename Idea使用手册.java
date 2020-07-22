@@ -33,3 +33,7 @@ IDEA-修改注释模版	|
 		file->setting->Editor->Filr and Code Templates->Includes->File Header 
 
 
+--------------------
+IDEA-设置代码粗体	|
+--------------------
+	Editor -> Color Scheme -> General -> Text -> Default Text -> Bold[√]

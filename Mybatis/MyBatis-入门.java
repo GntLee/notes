@@ -38,6 +38,29 @@
 	//关闭资源
 	session.close();
 
+	
+	// sql session有多个API可以获取到 sqlSession实例
+
+	SqlSession openSession(boolean autoCommit);
+		* 是否自动提交事务
+	SqlSession openSession(Connection connection);
+		* 从指定的Connection创建session
+	SqlSession openSession(TransactionIsolationLevel level);
+		* 事务隔离级别
+	SqlSession openSession(ExecutorType execType,TransactionIsolationLevel level)
+		* 执行类型,和事务隔离级别
+	SqlSession openSession(ExecutorType execType);
+		* 执行类型
+	SqlSession openSession(ExecutorType execType, boolean autoCommit);
+		* 执行类型
+	SqlSession openSession(ExecutorType execType, Connection connection);
+		* 执行类型
+	
+	ExecutorType 执行类型,是一个枚举
+		SIMPLE, 
+		REUSE, 
+		BATCH(获取一个批处理的Session)
+
 ————————————————————————
 4,MyBatis XML配置约束	|
 ————————————————————————

@@ -6,11 +6,42 @@
 		<artifactId>maven-compiler-plugin</artifactId>
 		<version>3.7.0</version>
 		<configuration>
-			<source>1.8/source>
+			<!-- 编译参数 -->
+			<compilerArgs>
+				<arg>-parameters</arg>
+			</compilerArgs>
+			<source>1.8</source>
 			<target>1.8</target>
 			<encoding>UTF-8</encoding>
 		</configuration>
 	</plugin>
+
+-------------------------------
+资源处理插件					|
+-------------------------------
+<dependency>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-resources-plugin</artifactId>
+	<version>3.1.0</version>
+</dependency>
+
+# 使用maven中的变量,替换掉配置文件的变量
+	* 在打包时,使用pom里面的变量来替换配置文件中的变量
+	* pom配置
+		<foo.name>Kevin</foo.name>
+		...
+		<configuration>	
+			<outputDirectory>target/classes</outputDirectory>							
+			<useDefaultDelimiters>false</useDefaultDelimiters>							
+			<delimiters>								
+				<delimiter>$</delimiter>
+			</delimiters>
+		</configuration>
+
+	* yum配置
+		name: $foo.name$
+	
+	* 只要是pom里面能使用的变量,都可以替换
 
 -------------------------------
 远程部署插件					|
@@ -111,3 +142,62 @@
 			</multipart-config>
 
 	# 可以删除ROOT项目
+
+
+
+-------------------------------
+自动添加版权声明				|
+-------------------------------
+<plugin>
+	<groupId>com.mycila.maven-license-plugin</groupId>
+	<artifactId>maven-license-plugin</artifactId>
+	<version>${maven-license-plugin.version}</version>
+	<configuration>
+		<basedir>${basedir}</basedir>
+		<header>src/main/resources/etc/header.txt</header>
+		<quiet>false</quiet>
+		<failIfMissing>true</failIfMissing>
+		<aggregate>true</aggregate>
+		<strictCheck>true</strictCheck>
+		<includes>
+			<include>**/src/*/java/**/*.java</include>
+			<include>**/src/*/webapp/js/*.js</include>
+			<include>**/src/*/webapp/css/*.css</include>
+			<include>**/src/*/webapp/scss/*.scss</include>
+			<include>**/src/*/resources/*.properties</include>
+			<include>**/src/*/webapp/WEB-INF/*.xml</include>
+			<include>**/src/*/webapp/*.xml</include>
+			<include>gulpfile.js</include>
+		</includes>
+		<excludes>
+			<exclude>**/src/main/java/**/package-info.java</exclude>
+			<exclude>**/src/main/java/**/Pangu.java</exclude>
+			<exclude>**/src/*/webapp/js/lib/*.js</exclude>
+			<exclude>**/src/*/webapp/js/*.min.js</exclude>
+			<exclude>**/src/*/webapp/css/*.css</exclude>
+		</excludes>
+
+		<useDefaultExcludes>true</useDefaultExcludes>
+		<mapping>
+			<java>SLASHSTAR_STYLE</java>
+			<scss>SLASHSTAR_STYLE</scss>
+		</mapping>
+		<useDefaultMapping>true</useDefaultMapping>
+		<properties>
+			<year>2012-2018</year>
+			<devTeam>b3log.org &amp; hacpai.com</devTeam>
+		</properties>
+		<encoding>UTF-8</encoding>
+	</configuration>
+	<executions>
+		<!-- 
+		eclipse sucks!!
+		<execution>
+			<phase>generate-resources</phase>
+			<goals>
+				<goal>format</goal>
+			</goals>
+		</execution>
+		-->
+	</executions>
+</plugin>

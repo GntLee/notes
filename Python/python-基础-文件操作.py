@@ -1,7 +1,7 @@
 ----------------------------
 Python-文件操作				|
 ----------------------------
-	open()
+	open(file, mode, buffering, encoding, errors, newline, closefd, opener)
 		* 全局函数,用于打开一个文件,如果文件不存在,抛出异常
 		* 返回一个对象:<class '_io.TextIOWrapper'>/<class '_io.BufferedWriter'>
 		* 第一个参数,以字符形式表示文件路径,可以是绝对路径,也可以是相对路径
@@ -68,6 +68,7 @@ Python-TextIOWrapper		|
 		str read()
 			* 返回相对于当前指针,文件的所有文本数据
 			* 第一个参数,表示要读取的字节个数,如果未指定,或者该参数为负数,则默认是所有
+			* 读取到了文件末尾返回 None
 			* '指针后移'
 
 		bool readable()

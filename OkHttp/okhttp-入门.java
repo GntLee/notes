@@ -10,6 +10,48 @@ okhttp-入门					|
 			<artifactId>okhttp</artifactId>
 			<version>3.7.0</version>
 		</dependency>
+	
+	
+	# 在线doc文档
+		https://square.github.io/okhttp/3.x/okhttp/
+	
+
+	# 组件
+		OkHttpClient 
+			* 相当于浏览器
+
+		RequestBody
+			* 请求体
+
+		Request
+			* 一次请求
+
+		Response
+			* 一次响应
+
+		ResponseBody
+			* 响应体
+
+---------------------------
+okhttp-client				|
+---------------------------
+	# 相当于浏览器的配置
+		OkHttpClient client = new OkHttpClient.Builder()
+			.followRedirects(false)					//禁止OkHttp的重定向操作,自己处理重定向
+			.followSslRedirects(false)				//禁止ssl重定向(80 -> 443)
+			.cookieJar(new CookieJar() {			//cookie的序列化与反序列化接口,需要自己实现
+				@Override
+				public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
+				}
+				@Override
+				public List<Cookie> loadForRequest(HttpUrl url) {
+					return null;
+				}
+			})
+			.build();
+	
+		
+		* 它应该是以单例的形式存在于应用中
 
 ---------------------------
 okhttp-Request				|

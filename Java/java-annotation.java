@@ -101,3 +101,30 @@ JAVA8特性					  |
 		新的
 			
 			
+------------------------------
+Inherited 					  |
+------------------------------
+	# 允许子类继承父类的注解
+		
+		import java.lang.annotation.*;
+		@Inherited
+		@Target(value = {ElementType.TYPE})
+		@Retention(value = RetentionPolicy.RUNTIME)
+		public @interface Foo {
+
+		}
+		
+		@Foo
+		public class Foo1 {
+		}
+
+		public class Foo2 extends Foo1 {
+		}
+
+		public class Main {
+			public static void main(String[] args) {
+				// true
+				boolean result = Foo2.class.isAnnotationPresent(Foo.class);
+				System.out.println(result);
+			}
+		}

@@ -11,6 +11,11 @@ MyBatis-枚举			|
 			* 默认的
 			* 是按照枚举的名字来存取的，对应数据库的设计为 直接使用枚举名。
 	
+	* 修改默认的枚举处理器(mybatis-cofig.xml), 实用属性:defaultEnumTypeHandler
+		<settings>
+			<setting name="defaultEnumTypeHandler" value="org.apache.ibatis.type.EnumOrdinalTypeHandler"/>
+		</settings>
+
 	* 如果有特殊需求,可以考虑自定义消息类型处理器来完成
 	
 

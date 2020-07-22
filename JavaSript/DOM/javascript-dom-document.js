@@ -53,6 +53,12 @@ document				|
 					* 返回当前 hover 的td
 					* 根据事件检索
 
+			* 根据标签名称和指定的k,v
+				<meta name="csrf-token" content="123456">
+				document.querySelector('meta[name="csrf-token"]');
+				document.querySelector('meta[name]');
+
+
 	querySelector();
 		* 跟进表达式检索一个节点
 

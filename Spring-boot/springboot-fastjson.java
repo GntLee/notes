@@ -12,29 +12,25 @@ Spring boot 使用 fastjson	 |
 -----------------------------
 Spring boot 方法一			 |
 -----------------------------
-	1,启动类继承 WebMvcConfigurerAdapter
+	1,实现 WebMvcConfigurer
 	2,覆盖方法 configureMessageConverters
 
 	# 代码
-		@SpringBootApplication
-		public class Application extends WebMvcConfigurerAdapter {
-			public static void main(String[] args){
-				SpringApplication.run(Application.class,args);
-			}
-			
+		@Configuration
+		public class WebMvcConfiguration implements WebMvcConfigurer {
 			@Override
 			public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-				super.configureMessageConverters(converters);
-				//定义 Converter 消息转换器
+				WebMvcConfigurer.super.configureMessageConverters(converters);
+
+				FastJsonConfig fastJsonConfig = new FastJsonConfig();
+				fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
+				fastJsonConfig.setCharset(StandardCharsets.UTF_8);
+				fastJsonConfig.setSerializerFeatures(SerializerFeature.DisableCircularReferenceDetect);
+
 				FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter();
 				fastJsonHttpMessageConverter.setSupportedMediaTypes(Arrays.asList(MediaType.APPLICATION_JSON_UTF8));
-				//定义 消息转换器配置对象
-				FastJsonConfig fastJsonConfig = new FastJsonConfig();
-				//进行配置操作
-				fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat);
-				//配置 converter 消息转换器
 				fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig);
-				//把converter 添加到 converters 中
+
 				converters.add(fastJsonHttpMessageConverter);
 			}
 		}
@@ -50,27 +46,23 @@ Spring boot 方法二			 |
 		 */
 		@Configuration
 		public class HttpMessageConverterConfiguration {
-			/**
-			 * FastJsonpHttpMessageConverter4
-			 * @return
-			 */
+
 			@Bean
-			public HttpMessageConverters httpMessageConverter(){
-				FastJsonpHttpMessageConverter4 fastJsonpHttpMessageConverter4 = new FastJsonpHttpMessageConverter4();
-				fastJsonpHttpMessageConverter4.setSupportedMediaTypes(Arrays.asList(MediaType.APPLICATION_JSON_UTF8));
+			public HttpMessageConverters fastJsonHttpMessageConverter() {
+
+				FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter();
+
 				FastJsonConfig fastJsonConfig = new FastJsonConfig();
-				fastJsonConfig.setCharset(StandardCharsets.UTF_8);
-				fastJsonConfig.setSerializerFeatures(
-						SerializerFeature.PrettyFormat,				//格式化
-						SerializerFeature.WriteMapNullValue,		//输出null字段
-						SerializerFeature.QuoteFieldNames,			//使用双引号
-						SerializerFeature.WriteNullListAsEmpty);	//把null集合/数组输出为[]
 				fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
-				fastJsonpHttpMessageConverter4.setFastJsonConfig(fastJsonConfig);
-				return new HttpMessageConverters(fastJsonpHttpMessageConverter4);
+				fastJsonConfig.setCharset(StandardCharsets.UTF_8);
+				fastJsonConfig.setSerializerFeatures(SerializerFeature.DisableCircularReferenceDetect);
+
+				fastJsonHttpMessageConverter.setSupportedMediaTypes(Arrays.asList(MediaType.APPLICATION_JSON_UTF8));
+				fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig);
+
+				return new HttpMessageConverters(fastJsonHttpMessageConverter);
 			}
-			
-			/**
+					/**
 			 * 跨域支持
 			 * @return
 			 */

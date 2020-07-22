@@ -4,14 +4,33 @@ logback					|
 	# log4j作者的又一个力作
 	# logback当前分成三个模块：
 		logback-core
-		logback- classic
+		logback-classic
 		logback-access
-		* logback-core是其它两个模块的基础模块。
-		* logback-classic是log4j的一个 改良版本。
-		* logback-classic完整实现SLF4J API使你可以很方便地更换成其它日志系统如log4j或JDK14 Logging。
-		* logback-access访问模块与Servlet容器集成提供通过Http来访问日志的功能。
+		* logback-core		是其它两个模块的基础模块。
+		* logback-classic	完整实现SLF4J API使你可以很方便地更换成其它日志系统如log4j或JDK14 Logging。是log4j的一个 改良版本。
+		* logback-access	访问模块与Servlet容器集成提供通过Http来访问日志的功能。
 	
-	# maven 依赖
+	# 普通项目
+		* 依赖
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+			</dependency>
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-core</artifactId>
+			</dependency>
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-classic</artifactId>
+			</dependency>
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-access</artifactId>
+			</dependency>
+		* classpath下添加配置文件: logback.xml
+
+	# spring 项目
 		<!-- logger begin-->
 		<!-- 该依赖会替换spring的日志实现 -->
 		<dependency>
@@ -67,3 +86,5 @@ logback	- 配置详解		|
 			<param-name>logbackConfigLocation</param-name>
 			<param-value>classpath:logback.xml</param-value>
 		</context-param>
+
+${CONSOLE_LOG_PATTERN:-%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}{faint} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- }{magenta} ---{faint} [%15.15t]{faint} %-40.40logger{39}{cyan} :{faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>

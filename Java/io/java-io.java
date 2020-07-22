@@ -120,6 +120,11 @@ BufferedReader				|
 	# length,可以设置缓冲区的大小
 	reader.readLine();
 		* 读取一行数据(并不包含回车符),当读到末尾。返回 null.
+	
+	LineNumberReader
+		* BufferedReader 的子类,带有可以读写行号的类
+			getLineNumber()//可以获取读取的行号
+			setLineNumber(num)//设置初始的行号,读取的第一行从num+1开始标记
 
 ----------------------------
 FileWriter					|
@@ -180,13 +185,43 @@ OutputStreamWriter			|
 打印流						|
 ----------------------------
 	PrintWriter
+		PrintWriter(File file)
+		PrintWriter(File file, String csn)
+		PrintWriter(OutputStream out)
+		PrintWriter(OutputStream out, boolean autoFlush)
+		PrintWriter(Writer out)
+		PrintWriter(Writer out, boolean autoFlush)
+		PrintWriter(String fileName)
+		PrintWriter(String fileName, String csn)
+		PrintWriter(OutputStream out, boolean autoFlush, Charset charset) 
+
 	PrintStream
+		PrintStream(File file)
+		PrintStream(File file, String csn)
+		PrintStream(OutputStream out)
+		PrintStream(OutputStream out, boolean autoFlush)
+		PrintStream(OutputStream out, boolean autoFlush, String encoding)
+		PrintStream(String fileName)
+		PrintStream(String fileName, String csn)
+
+
+	autoFlush: 是否自动刷新
+
+
+
+	* 此流不负责数据源,只负责数据目的
+	* 为其他输出流添加了功能
+	* 永远不会抛出IOException,但是可能抛出其他异常
+	* 两个打印流方法完全一致
 
 ----------------------------
 管道流						|
 ----------------------------
 	PipedInputStream	
 	PipedOutputStream
+
+	* 结合线程使用,输入输出直接进行连接,不建议使用单线程,因为读取流先开启,那么流中一旦没有数据,读取流的阻塞式方法就会一直处于等待状态-死锁
+
 
 ----------------------------
 序列化流					|
@@ -263,6 +298,9 @@ ByteArrayOutputStream		|
 	# 方法
 		void writeTo(OutputStream out);
 			* 把当前流中的数据都写入到一个输出流
+		
+		String toString(Charset charset)
+			* 把字节数据, 以指定编码转换为字符串
 	
 	#　Demo
 		* 把内存中的字节,响应给客户端

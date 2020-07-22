@@ -158,7 +158,7 @@ python-类				|
 					attrs['add'] = lambda self, value: self.append(value)
 					return type.__new__(cls, name, bases, attrs)
 					# return type(name,bases,attrs)									也一样
-					# return super(ListMetaclass,self).__new__(self,name,bases,attrs)		也一样
+					# return super(ListMetaclass,cls).__new__(cls,name,bases,attrs)		也一样
 		2,自定义类
 			* 继承自 list,就有了 list 的所有方法
 			* 使用 metaclass 关键字,指定元类
@@ -217,6 +217,11 @@ python-类				|
 		__delitem__(self,key)
 			* 以上几个,把对象当字典使用时调用
 		
+		__getattribute__(self,item)
+		__setattr__(self, key, value)
+		__delattr__(self, item)
+			* 以上函数,在对对象进行属性操作的时候调用
+
 		__add__(self,other)
 			* 执行俩对象相加的时候执行的方法
 		__lt__(self,other)

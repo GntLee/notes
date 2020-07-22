@@ -83,7 +83,10 @@ request						|
 			pic = files['poc']
 
 			# 获取文件的名称
-			filename = pic.filename()
+			filename = pic.filename;
+
+			# 获取单独的请求体
+			item__headers = pic.headers;
 
 			# 获取文件的二进制数据(bytes)
 			datas = pic.read()

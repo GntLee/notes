@@ -107,7 +107,22 @@
 			fun(dic1='1',name="Kevin",dic2="2")
 			fun(**{'dic1':'1','name':"Kevin",'dic2':"2"})
 			
-
+    
+    6, 仅位置参数(3.8新特性)
+        * python可以把位置参数(必须参数)当做命名关键字参数进行传递, 参数的顺序可改变, 不影响结果
+            def foo(var1, var2):
+                print(f"var1={var1}, var2={var2}") # var1=2, var2=1
+            foo(var2=1, var1=2)
+        
+        * 从语法层面上禁止这样调用, 就可以使用仅限位置参数
+            def foo(var1, var2, /):
+                print(f"var1={var1}, var2={var2}") # var1=1, var2=2
+            # foo(var2=1, var1=2) error
+            foo(1, 2)
+        
+        * 就是在位置参数后面添加一根斜线: /
+            def foo(x, y, /, *args, **kwargs)
+    
 	* 函数参数的定义顺序
 		1,必须参数
 		2,默认参数

@@ -59,7 +59,6 @@ XMLHttpRequest				|
 			* 可选值
 				arraybuffer,
 				blog,	
-				
 
 		responseXML
 			* 返回服务器响应的XML数据
@@ -74,15 +73,45 @@ XMLHttpRequest				|
 		upload
 			* 当提交的表单是文件表单的时候,该属性会存在
 			* 该属性可以监听一个上传事件:progress
+				if(xhr.upload){
+					//监听上传属性的上传事件,每次上传事件都会执行 progressHandlingFunction
+					xhr.upload.addEventListener('progress',progressHandlingFunction, false);
+					//xhr.upload.onprogress = function(){}			也可以
+				}
 			* Event属性
 					total;		//获取上传文件的总(所有)大小
 					loaded;		//获取已经上传的文件大小
+
+					function progressHandlingFunction(event) {
+						event.total;		//获取上传文件的总大小
+						event.loaded;		//获取已经上传的文件大小
+						//获取进度的百分比值
+						var percent  = (event.loaded / event.total) * 100;
+						//四舍五入保留两位小数
+						percent = percent.toFixed(2);
+					}
 	
+		statusText
+			* http状态的描述文字
+		
+		onload
+			* 就是readyState = 4 时会执行的回调,它可以代替这种判断
+				if(xmlHttp.readyState == 4 && xmlHttp.status == 200){}
+			
+			* 使用 onload
+				let xhr = new XMLHttpRequest();
+				xhr.onload = function () {
+					// 得到客户端的响应
+					let json = JSON.parse(xhr.responseText);
+				};
+				xhr.open('GET', '/foo', true);
+				xhr.send(null);
+
 	# 事件
 		onreadyStatechange
 			* 当异步对象的状态发生改变的时候调用
 			* 当使用 async=false 时，不用编写 onreadystatechange 函数,把代码放到 send() 语句后面即可
-
+				
 		
 ---------------------------
 XMLHttpRequest-GET			|

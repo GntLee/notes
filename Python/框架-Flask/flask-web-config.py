@@ -26,7 +26,7 @@ congig							|
 			* 就是在环境变量中添加一个值,该值指向了一个配置文件
 	
 	* config 具备的方法
-		get_namespace()
+		get_namespace(prefix)
 			* 获取指定前缀的所有配置项
 				app.config['IMAGE_STORE_TYPE'] = 'fs'
 				app.config['IMAGE_STORE_PATH'] = '/var/app/images'

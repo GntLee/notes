@@ -13,6 +13,7 @@ socketserver				|
 					|-ForkingUDPServer(支持多进程的UDPServer,仅仅在unix有效))
 					|-UnixDatagramServer
 		BaseRequestHandler(Handle顶层类)
+		ThreadingMixIn
 
 ----------------------------
 BaseServer					|

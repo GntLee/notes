@@ -35,6 +35,9 @@
 			<artifactId>spring-websocket</artifactId>
 			<version>4.2.8.RELEASE</version>
 		</dependency>
+	
+	# 文档
+		https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#websocket
 
 	# 创建 MessageHandler
 		* 主要是用于处理消息

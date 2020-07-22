@@ -439,3 +439,10 @@ constructor
 
 
 
+BeanFactoryPostProcessor
+ApplicationListener
+ElasticProcessor
+ClassPathBeanDefinitionScanner
+ImportBeanDefinitionRegistrar
+ResourceLoaderAware
+EnvironmentAware

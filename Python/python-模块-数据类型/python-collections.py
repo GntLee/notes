@@ -71,7 +71,7 @@ collections-OrderedDict			|
 -------------------------------
 	* 普通 dict 是无序的
 	* 该 dict 是有序的 dict
-	* OrderedDict 的Key会按照插入的顺序排列,不是Key本身排序
+	* OrderedDict 的Key会按照插入的顺序排列,不是Key本身排序(继承与Dict)
 	* 创建
 		collections.OrderedDict([('b', 2),('a', 1) , ('c', 3)])
 	
@@ -83,10 +83,14 @@ collections-OrderedDict			|
 		print(dic)
 	
 	* api
-		tuple popitem()
+		tuple popitem(last = True)
 			* 删除元素,并且返回
 			* 关键字参数,是否是删除最后一个元素
 				last	# 默认值:True
+		
+		 None move_to_end(key, last=True)
+			*  移除元素到最后/前 ,前后取决于参数:last
+
 	
 	* 可以实现一个 FIFO(先进先出)的 dict,当容量超出限制时先删除最早添加的Key
 		

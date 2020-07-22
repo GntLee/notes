@@ -3,7 +3,7 @@
 ----------------------------
 
 	* 官方文档
-		http://docs.python.org/3/library/functions.html*abs
+		https://docs.python.org/3/library/functions.html
 	
 	exit()
 		* 退出程序,如果参数是字符串,则打印该字符串
@@ -226,9 +226,8 @@
 ----------------------------
 全局函数-数学相关			|
 ----------------------------
+	sum(iter)
 	max(iter)
-		* 
-
 	min(iter)
 		* 
 	

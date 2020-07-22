@@ -56,6 +56,40 @@ Cookie
 	> cookie.setHttpOnly(true);
 	> 提高了安全性,JS将不会读取到Cookie值
 
+   * SameSite (目前Servlet-api4.1还没实现)
+	> 防止csrf攻击
+	> SameSite 属性可以设置3个值
+
+	Strict
+		* 最为严格，完全禁止第三方 Cookie，跨站点时，任何情况下都不会发送 Cookie。
+		* 换言之，只有当前网页的 URL 与请求目标一致，才会带上 Cookie。
+
+	Lax
+		* 规则稍稍放宽，大多数情况也是不发送第三方 Cookie，但是导航到目标网址的 Get 请求除外。
+		* 导航到目标网址的 GET 请求，只包括三种情况：链接，预加载请求，GET 表单
+		* (默认)
+		
+		请求类型	示例					正常情况	Lax
+		链接		<a href="..."></a>			发送 Cookie	发送 Cookie
+		预加载		<link rel="prerender" href="..."/>	发送 Cookie	发送 Cookie
+		GET 表单	<form method="GET" action="...">	发送 Cookie	发送 Cookie
+		POST 表单	<form method="POST" action="...">	发送 Cookie	不发送
+		iframe		<iframe src="..."></iframe>		发送 Cookie	不发送
+		AJAX		$.get("...")				发送 Cookie	不发送
+		Image		<img src="...">				发送 Cookie	不发送
+	
+	None
+		* 关闭SameSite属性，将其设为None
+		* 前提是必须同时设置Secure属性（Cookie 只能通过 HTTPS 协议发送），否则无效。
+
+		* 无效设置
+			Set-Cookie: widget_session=abc123; SameSite=None
+
+		* 有效设置
+			Set-Cookie: widget_session=abc123; SameSite=None; Secure
+	
+
+
 
 
 

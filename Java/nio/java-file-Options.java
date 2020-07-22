@@ -25,8 +25,8 @@ StandardOpenOption			|
 		WRITE,					//打开写权限
 		APPEND,					//在末尾添加,不覆盖以前的数据
 		TRUNCATE_EXISTING,		//如果文件已经存在，并且打开进行WRITE 访问，则其长度将被截断为0。
-		CREATE,					//如果不存在,则创建新的
-		CREATE_NEW,				//创建一个新的文件，如果该文件已经存在失败。
+		CREATE,					//如果不存在,则创建新的,如果存在,则从头开始写入内容
+		CREATE_NEW,				//创建一个新的文件，如果该文件已经存在,则抛出异常。
 		DELETE_ON_CLOSE,		//在jvm关闭的时候删除文件
 		SPARSE,					//稀疏文件
 		SYNC,					//要求将文件内容或元数据的每次更新都同步写入底层存储设备。

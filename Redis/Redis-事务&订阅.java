@@ -14,7 +14,7 @@ Redis-事务			|
 	unwatch
 	watch
 -------------------
-Redis-发布订阅			|
+Redis-发布订阅		|
 -------------------
 	publish channle message
 		# 把信息(message)发送给指定的频道(channle)
@@ -32,4 +32,84 @@ Redis-发布订阅			|
 		# linux下启动redis客户端的时候,就订阅一个指定服务器频道
 		# 同上
 		
-		
+
+
+-------------------
+Redis-CAS更新		|
+-------------------
+	# watch 可以监听一个key, 在该Key发生数据变化的时候, 自动回滚当前的事务
+		* 可以通过当前事务是否回滚, 来判断CAS是否更新成功
+
+import io.lettuce.core.RedisClient;
+import io.lettuce.core.TransactionResult;
+import io.lettuce.core.api.StatefulRedisConnection;
+import io.lettuce.core.api.sync.RedisCommands;
+
+import java.util.concurrent.CountDownLatch;
+
+public class CasUpdate {
+
+    private static final RedisClient redisClient;
+
+    public static void main(String[] args) throws Exception{
+
+        StatefulRedisConnection<String, String> connection = redisClient.connect();
+        RedisCommands<String, String> redisCommands = connection.sync();
+        redisCommands.hset("user", "name", "KevinBlandy");
+        redisCommands.hset("user", "balance", "0");
+        redisCommands.hset("user", "version", "0");
+
+		// 100个线程执行 + 1操作
+        CountDownLatch countDownLatch = new CountDownLatch(100);
+        for(int x = 0 ; x < 100 ;x ++){
+            new Thread(() -> {
+                try {
+                    casUpdate();
+                    countDownLatch.countDown();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
+        countDownLatch.await();
+    }
+
+    public static void notSafeUpdate ()throws Exception{
+        StatefulRedisConnection<String, String> connection = redisClient.connect();
+        RedisCommands<String, String> redisCommands = connection.sync();
+    }
+
+    public static void casUpdate() throws Exception {
+        StatefulRedisConnection<String, String> connection = redisClient.connect();
+        RedisCommands<String, String> redisCommands = connection.sync();
+
+        while (true){
+
+            String watchResult = redisCommands.watch("user");
+            if (!watchResult.equals("OK")){
+                throw new RuntimeException();
+            }
+            String multiResult =  redisCommands.multi();
+            if (!multiResult.equals("OK")){
+                throw new RuntimeException();
+            }
+
+
+            // 对数据进行自增 +1 操作
+            redisCommands.hincrby("user", "balance", 1);
+            redisCommands.hincrby("user", "version", 1);
+
+            TransactionResult transactionResult = redisCommands.exec();
+            System.out.println(transactionResult);
+            if (transactionResult.wasDiscarded()){
+                // 更新失败, 继续自旋
+                continue;
+            }
+            break;
+        }
+    }
+
+    static {
+        redisClient = RedisClient.create("redis://localhost:6379/0");
+    }
+}

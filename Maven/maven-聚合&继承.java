@@ -51,3 +51,27 @@
 
 * 继承和聚合,可以放一起！超级整合
 * 既是做聚合的,也是做继承的
+
+
+------------------------
+3,多继承				|
+------------------------
+	<dependencyManagement>
+		<dependencies>
+			<!-- 此处继承了a 和 b 两个项目，type为pom，scope 为 import -->
+			<dependency>
+				<groupId>com.cbm.stu</groupId>
+				<artifactId>maven-parent-a</artifactId>
+				<version>1.0.0</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.cbm.stu</groupId>
+				<artifactId>maven-parent-b</artifactId>
+				<version>1.0.0</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>

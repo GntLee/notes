@@ -13,6 +13,22 @@
 			List<T>  parseArray(String text, Class<T> clazz); 
 				* 把JSON字符串反序列化为List集合
 
+
+# 构造一个排序的JSONObject 对象
+	new JSONObject(true);
+	//源码
+	public JSONObject(boolean ordered){
+        this(DEFAULT_INITIAL_CAPACITY, ordered);
+    }
+	public JSONObject(int initialCapacity, boolean ordered){
+        if (ordered) {
+			//如果是需要排序的话,创建的就是 LinkedHashMap 对象
+            map = new LinkedHashMap<String, Object>(initialCapacity);
+        } else {
+            map = new HashMap<String, Object>(initialCapacity);
+        }
+    }
+
 -----------------------------------
 反序列化泛型						|
 -----------------------------------
@@ -43,20 +59,23 @@ FastJsonConfig
 			* 输出key时是否使用双引号,默认为true	
 		SerializerFeature.UseSingleQuotes	
 			* 使用单引号而不是双引号,默认为false	
-		SerializerFeature.WriteMapNullValue	
-			* 是否输出值为null的字段,默认为false	
 		SerializerFeature.WriteEnumUsingToString	
 			* Enum输出name()或者original,默认为false	
+			* 如果该属性为true,则枚举字段输出 toString() 的返回值
 		SerializerFeature.UseISO8601DateFormat	
 			* Date使用ISO8601格式输出，默认为false	
+		
+		SerializerFeature.WriteMapNullValue	
+			* 是否输出值为null的普通字段和object字段,默认为false
 		SerializerFeature.WriteNullListAsEmpty	
 			* List字段如果为null,输出为[],而非null	
 		SerializerFeature.WriteNullStringAsEmpty	
-			* 字符类型字段如果为null,输出为”“,而非null	
+			* 字符类型字段如果为null,输出为"",而非null	
 		SerializerFeature.WriteNullNumberAsZero	
 			* 数值字段如果为null,输出为0,而非null	
 		SerializerFeature.WriteNullBooleanAsFalse	
 			* Boolean字段如果为null,输出为false,而非null	
+		
 		SerializerFeature.SkipTransientField	
 			* 如果是true，类中的Get方法对应的Field是transient，序列化时将会被忽略。默认为true	
 		SerializerFeature.SortField	
@@ -82,6 +101,7 @@ FastJsonConfig
 		SerializerFeature.BeanToArray	
 			* 将对象转为array输出	
 		SerializerFeature.WriteNonStringKeyAsString		
+			* 如果key不为String 则转换为String 比如Map的key为Integer
 		SerializerFeature.NotWriteDefaultValue		
 		SerializerFeature.BrowserSecure		
 		SerializerFeature.IgnoreNonFieldGetter		

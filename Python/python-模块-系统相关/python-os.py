@@ -122,10 +122,12 @@ os						|
 		* 运行shell/cmd命令直接显示
 		* 返回值如果是 0 则表示执行OK
 	
-	# 
+	# 获取安全的随机数
 		urandom(num)			
-			* unkonw
-	
+			* num 表示随机数的长度
+			* 返回的 byte[]
+				base64.b64encode(os.urandom(32))
+
 	os._wrap_close popen("bash command"")
 		* 执行命名,获取对象
 		* 执行该返回对象的read(),可以获取到命名执行后的结果

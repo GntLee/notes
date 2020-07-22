@@ -102,3 +102,49 @@ Python身份运算符			|
 	# 根据 id() 方法返回值进行比较
 
 
+----------------------------
+海象运算符					|
+----------------------------
+    # Java里面可以这样写
+        boolean flag = false;
+		if ((flag = true) == true){
+			System.out.println("flag=" + flag);
+		}
+     
+    # Python里面不可以这么写
+        x = False
+        if (x = True) is True:
+            print(x)
+    
+    # Python里面可以这么写
+        x = False
+        if (x := True) is True:
+            print(x)
+    
+    # 解释
+        
+        # 第一种瓜皮写法
+        pattern = re.compile('s')
+        data = 'ss'
+        if pattern.match(data):
+            print(pattern.match(data).group(0))
+        
+        # 第二种写法
+        match = pattern.match(data)
+        if match:
+            print(match.group(0))
+
+        
+        # 海象运算符写法
+        if (match := pattern.match(data)) is not None:
+            print(match.group(0))
+            
+        * 本来if这种控制结构语句只是求值表达式, 看结果是不是符合条件, 而在这里, 它做了3件事
+            - 对表达式pattern.match(data)求值
+            - 把值的结果赋值给match
+            - 把match 作为if的条件, 判断它的值是不是None
+
+ 
+ 
+    
+    

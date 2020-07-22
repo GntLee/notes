@@ -8,3 +8,9 @@
 		# 服务提供端的host name
 	
 
+spring:
+  cloud:
+    loadbalancer:
+      retry:
+		# 是否开启客户端的异常重试机制(配置类:LoadBalancerRetryProperties)
+        enabled: true

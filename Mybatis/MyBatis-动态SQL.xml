@@ -68,6 +68,45 @@
 			* item根本没用到
 			* 接口方法:					queryDoorsByUser(@Param(value="userDoor") UserDoorVO userDoor,PageBounds pageBounds)throws Exception;
 			* userDoor的集合属性:		private List<Integer> doorTypes;
+		
+		# 遍历Map方式1
+
+			// 接口
+			List<MenuEntity> selectByCondition(@Param("condition")Map<String, Object> condition);
+
+			// 调用
+			Map<String, Object> condition = new HashMap<>();
+			condition.put("id", 1);
+			condition.put("name", "Hello");
+			this.menuMapper.selectByCondition(condition);
+			
+			// 映射
+			<select id="selectByCondition">
+				SELECT
+					*
+				FROM
+					`auth_menu`
+				<where>
+					<if test="condition != null">
+						<foreach collection="condition.entrySet()" index="key" item="value" open="" separator="AND" close="">
+							`${key}` = #{value}
+						</foreach>
+					</if>
+				</where>
+			</select>
+		
+		# 遍历Map方式2, key value分开读取
+			<insert>
+				INSERT INTO table
+				<foreach collection="condition.keys" item="key" open="(" separator="," close=")">
+					获取值：#{param[key]}
+					键：#{key}
+				</foreach>
+					VALUES
+				<foreach collection="condition.value" item="val" open="(" separator="," close=")">
+					值：#{val}
+				</foreach>
+			</insert>
 ————————————————————————————————————
 2,MyBatisSQL片段					|
 ————————————————————————————————————

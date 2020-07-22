@@ -22,6 +22,7 @@ response						|
 	* 返回 render_template(tempalte,**context) 实例,来完成模版的渲染响应
 		tempalte:模版名称
 		context	:上下文
+	* 其实该函数返回的是 str,也就是渲染后的模板字符串数据
 	* Flask 会在 templates 文件夹里寻找模板
 	* 如果应用是个模块,这个文件夹应该与模块同级
 		application.py
@@ -33,7 +34,7 @@ response						|
 			|-__init__.py
 			|-templates
 				|-hello.html
-	
+
 --------------------------------
 构建 response					|
 --------------------------------
@@ -42,7 +43,7 @@ response						|
 		如果返回的是一个字符串,响应对象会用字符串数据和默认参数创建
 			return "Hello World"
 		如果返回的是一个元组,且元组中的元素可以提供额外的信息,这样的元组必须是 (response, status, headers) 的形式,且至少包含一个元素, status 值会覆盖状态代码, headers 可以是一个列表或字典,作为额外的消息标头值
-			 return ("{'name':'Kevin'}",201,{'ContentType':'application/json;charset=UTF-8'})
+			 return ("{'name':'Kevin'}",201,{'Content-Type':'application/json;charset=UTF-8'})
 		如果上述条件均不满足, Flask 会假设返回值是一个合法的 WSGI 应用程序,并转换为一个请求对象
 	
 	* 如果你想在视图里操纵上述步骤结果的响应对象,可以使用 make_response() 函数
@@ -70,7 +71,10 @@ response						|
 			response.set_cookie('JSESSIONID','F8575532',max_age=-1)
 			return response
 	
-
+	* make_response 响应的是一个 Response 对象
+	* 也可以自己创建一个 Response对象
+		from flask import Response
+	
 --------------------------------
 重定向							|
 --------------------------------
@@ -80,6 +84,10 @@ response						|
 		@app.route('/')
 		def index():
 			return redirect(url_for('login'))
+		
+		* url_for的第一个参数是处理方法的名称, 不是url
+		* 还可以有第二个参数，用来添加重定向的url参数
+			return redirect(url_for('name_view', id = user_id))
 	
 	* 也可以重定向到站外连接:return redirect('http://javaweb.io')
 

@@ -122,35 +122,58 @@ Spring-boot 配置SSL				|
 			JettyEmbeddedServletContainerFactory
 
 		* 代码
+				import org.apache.catalina.Context;
+				import org.apache.catalina.connector.Connector;
+				import org.apache.tomcat.util.descriptor.web.SecurityCollection;
+				import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
+				import org.springframework.beans.factory.annotation.Value;
+				import org.springframework.boot.web.embedded.tomcat.TomcatContextCustomizer;
+				import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+				import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+				import org.springframework.context.annotation.Configuration;
+				/**
+				 * 
+				 * 
+				 * @author Administrator
+				 *
+				 */
 				@Configuration
-				public class TomcatConfiguration {
-					
-					@Bean
-					public EmbeddedServletContainerFactory embeddedServletContainerFactory(){
-						TomcatEmbeddedServletContainerFactory tomcatEmbeddedServletContainerFactory = new TomcatEmbeddedServletContainerFactory(){
+				public class TomcatConfiguration implements WebServerFactoryCustomizer<TomcatServletWebServerFactory> {
+
+					@Value("${server.ssl.enabled:false}")
+					private boolean sslEnable;
+
+					@Value("${server.port}")
+					private Integer port;
+
+					static final Integer HTTP_PORT = 80;
+
+					@Override
+					public void customize(TomcatServletWebServerFactory factory) {
+						if (!sslEnable) {
+							return;
+						}
+						factory.addContextCustomizers(new TomcatContextCustomizer() {
+
 							@Override
-							protected void postProcessContext(Context context) {
+							public void customize(Context context) {
+								
 								SecurityConstraint securityConstraint = new SecurityConstraint();
 								securityConstraint.setUserConstraint("CONFIDENTIAL");
-								SecurityCollection securityCollection = new SecurityCollection();
-								securityCollection.addPattern("/*");
-								securityConstraint.addCollection(securityCollection);
+								
+								SecurityCollection collection = new SecurityCollection();
+								collection.addPattern("/*");
+								
+								securityConstraint.addCollection(collection);
+								
 								context.addConstraint(securityConstraint);
 							}
-						};
-						tomcatEmbeddedServletContainerFactory.addAdditionalTomcatConnectors(httpConnectot());
-						return tomcatEmbeddedServletContainerFactory;
-					}
-					
-					@Bean
-					public Connector httpConnectot(){
-						//NIO连接器
+
+						});
 						Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
-						connector.setScheme("http");
-						connector.setPort(8080);            //监听端口
-						connector.setSecure(false);
-						connector.setRedirectPort(8443);    //转发端口
-						return connector;
+						connector.setPort(HTTP_PORT);
+						connector.setRedirectPort(this.port);
+						factory.addAdditionalTomcatConnectors(connector);
 					}
 				}
 

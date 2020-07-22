@@ -184,7 +184,10 @@ Files-静态方法				|
 	Path			createTempDirectory(Path dir,String prefix,FileAttribute<?>... attrs)
 						* 创建临时文件夹,基于 dir
 						
-	
+	//=======================比较
+	long mismatch(Path path, Path path2)
+				* 查找并返回内容中第一个不匹配字节的位置
+				* 如果找不到返回 -1
 
 ----------------------------
 Files-Options				|

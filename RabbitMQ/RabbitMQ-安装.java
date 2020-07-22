@@ -79,20 +79,27 @@ RabbitMQ-安装 Linux				|
 	6,设置配置文件
 		cd /etc/rabbitmq																		//进入配置文件目录
 		cp /usr/share/doc/rabbitmq-server-3.4.1/rabbitmq.config.example /etc/rabbitmq/			//复制指定目录下的案例配置到当前目录
-		mv rabbitmq.config.example rabbitmq.config												//改名
+		mv rabbitmq.config.example rabbitmq.config												//改名复制到 /etc 目录下的配置文件
 	
 	7,开启用户远程可访问
 		vim /etc/rabbitmq/rabbitmq.config
 		 {loopback_users, []}
 			* 去掉该行前面的注释符号"%%",并且删除最后面的逗号','
 
-	8,开启WEB界面管理工具
+	8,开启WEB界面管理工具以及基本的维护
+		
 		rabbitmq-plugins enable rabbitmq_management
-		service rabbitmq-server restart
+
+		systemctl start rabbitmq-server.service 
+		systemctl stop rabbitmq-server.service 
+		systemctl restart rabbitmq-server.service 
+		
 
 	9,防火墙开启15672端口
 		/sbin/iptables -I INPUT -p tcp --dport 15672 -j ACCEPT
 		/etc/rc.d/init.d/iptables save
+
+		firewall-cmd --add-port=15672/tcp --permanent 
 
 
 

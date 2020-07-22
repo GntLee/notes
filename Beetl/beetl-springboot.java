@@ -188,3 +188,33 @@ beetl-2.7.26集成方式			|
         beetlSpringViewResolver.setConfig(beetlGroupUtilConfiguration);
         return beetlSpringViewResolver;
     }
+
+-------------------------------
+Spring-boot	IDEA下模版的热更新	|
+-------------------------------
+	1,添加依赖
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+		</dependency>
+	
+	2,插件
+		 <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                	<executable>true</executable>
+					<fork>true</fork>		//目前我不知道这个fork有啥用?
+                </configuration>
+            </plugin>
+        </plugins>
+	
+	3,配置
+		# devtools,指定模版的目录
+		spring.devtools.restart.exclude=templates/**									*/
+	
+	4,快捷键重新加载
+		ctrl + shift + F9
+		
+		

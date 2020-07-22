@@ -86,7 +86,7 @@ python3-模块				|
 		61. os:多方面的操作系统接口
 		62. io:流核心工具
 		63. time:时间的查询与转化
-		64. argparser:命令行选项、参数和子命令的解析器
+		64. argparse:命令行选项、参数和子命令的解析器
 		65. optparser:命令行选项解析器
 		66. getopt:C风格的命令行选项解析器
 		67. logging:Python日志工具

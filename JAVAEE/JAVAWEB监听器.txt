@@ -118,3 +118,24 @@ javaBean实现监听钝化/活化的的接口
 HttpSessionActivationListener
    public void sessionDidActivate(HttpSessionEvent arg0);
    public void sessionWillPassivate(HttpSessionEvent arg0);
+  
+
+-------SESSIONID变化监听器
+HttpSessionIdListener
+	void sessionIdChanged(HttpSessionEvent event, String oldSessionId);	
+
+——————————————————————————
+总结			  |
+——————————————————————————
+ServletContextListener
+ServletContextAttributeLitener
+
+HttpSessionListener
+HttpSessionAttributeLitener
+
+ServletRequestListener
+SerlvetRequestAttributeLitener
+
+HttpSessionBindingListener
+HttpSessionActivationListener
+HttpSessionIdListener

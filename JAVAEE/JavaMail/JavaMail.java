@@ -82,6 +82,13 @@ public class Demo1
 		MimeMessage msg = new MimeMessage(session);
 		try 
 		{
+			/**
+				如果地址信息包含中文,需要进行编码
+				String addr = javax.mail.internet.MimeUtility.encodeText("springboot中文社区<no-reply@springboot.io>");
+				new InternetAddress(addr);
+
+			**/
+
 			//设置发件人信息
 			msg.setFrom(new InternetAddress("747692844@qq.com"));
 			//设置收件人信息

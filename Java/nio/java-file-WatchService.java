@@ -1,10 +1,60 @@
 -----------------------
 文件监视				|
 -----------------------
-	# 监视某个目录
-		* 文件创建
+	# 监视某个目录下文件的
+		* 创建
 		* 删除
 		* 修改
+	
+	# 涉及类库
+		WatchService
+		WatchKey
+		WatchEvent<?>
+		WatchEvent.Kind
+	
+	# 事件
+		StandardWatchEventKinds.ENTRY_CREATE	文件创建
+		StandardWatchEventKinds.ENTRY_DELETE	文件删除
+		StandardWatchEventKinds.ENTRY_MODIFY	文件修改
+		StandardWatchEventKinds.OVERFLOW		事件丢失，一般不关注
+
+-----------------------
+WatchService			|
+-----------------------
+	# 接口方法
+		@Override
+		void close() throws IOException;
+		WatchKey poll();
+		WatchKey poll(long timeout, TimeUnit unit) throws InterruptedException;
+		WatchKey take() throws InterruptedException;
+
+
+-----------------------
+WatchKey				|
+-----------------------
+	# 接口方法
+		boolean isValid();		
+		List<WatchEvent<?>> pollEvents();
+		boolean reset();
+		void cancel();
+		Watchable watchable();
+
+-----------------------
+WatchEvent				|
+-----------------------	
+	# 接口方法
+		Kind<T> kind();
+		int count();
+		T context();
+	
+	# 内部接口
+		public static interface Kind<T> {
+			String name();
+			Class<T> type();
+		}
+		public static interface Modifier {
+			String name();
+		}
 
 -----------------------
 Demo					|

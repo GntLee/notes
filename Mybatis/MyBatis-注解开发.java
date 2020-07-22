@@ -59,3 +59,15 @@
 
 	4,直接执行返回接口引用对象的抽象方法,就能自动执行接口抽象方法上定义的SQL语句
 		User u = userMapper.findById(user);
+
+————————————————————————
+3,注解开发 - 关系映射	|
+————————————————————————
+	 @Results(id = "BASE_RESULT_MAP",value = {
+        @Result(column = "",property = "",one = @One(select = "")),
+        @Result(column = "",property = "",many = @Many(select = ""))
+    })
+
+	* @One 和 @Many 中的 select 可以是 mapper检索的命名空间,也可以直接是SQL语句
+	
+	

@@ -46,4 +46,42 @@ Spring-boot 事务			|
 		* spring boot专门用户配置事务的类是:org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration
 		* 'spring boot中不需要显示开启使用'@EnableTransactionManagement 注解,'直接在哪里标注'
 	
+		* 添加依赖
+			 <dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-tx</artifactId>
+			</dependency>
+		
+		* 添加注解
+			@EnableTransactionManagement
 	
+	# 使用监听器, 监听事务的状态
+		* 使用:@TransactionalEventListener 注解, 标识在监听方法
+			@Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+			@Retention(RetentionPolicy.RUNTIME)
+			@Documented
+			@EventListener
+			public @interface TransactionalEventListener {
+
+				TransactionPhase phase() default TransactionPhase.AFTER_COMMIT;
+
+				boolean fallbackExecution() default false;
+
+				@AliasFor(annotation = EventListener.class, attribute = "classes")
+				Class<?>[] value() default {};
+
+				 */
+				@AliasFor(annotation = EventListener.class, attribute = "classes")
+				Class<?>[] classes() default {};
+
+				String condition() default "";
+
+			}
+			
+			* phase 枚举, 表示感兴趣的事件
+				BEFORE_COMMIT,
+				AFTER_COMMIT,
+				AFTER_ROLLBACK,
+				AFTER_COMPLETION
+			
+			* fallbackExecution 

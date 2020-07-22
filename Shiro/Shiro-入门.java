@@ -1,6 +1,9 @@
 ----------------------------
 Shiro-入门					|
 ----------------------------
+	# 文档
+		http://shiro.apache.org/reference.html
+
 	# shiro 简介
 		来自于Apache的神器,是Apache的顶级项目.是一个易用强大的JAVA安全框架,提供认证,授权,加密,会话管理等功能
 	
@@ -33,6 +36,7 @@ Shiro-入门					|
 		WebSuport				--针对于WEB架构的一些功能
 		Caching					--缓存
 		Cincurrency				--多线程
+		RunAs					-- 在得到授权的情况下,允许访问其他用户的资源
 		RemmberMe				--记住用户身份... ...
 	
 	# shiro 三大核心组键

@@ -30,6 +30,9 @@
 	# 属性
 		length
 			* 返回函数的形参数量
+		
+		name
+			* 返回函数的名称
 	
 	# 可以给函数自定义属性/访问
 		function test(){}
@@ -125,6 +128,20 @@
 			
 	# 获取当前函数的名称
 		arguments.caler;
+
+----------------------------
+caller						|
+----------------------------
+	# 用来获取到,调用当前函数的函数
+		function b(){
+			a();
+		}
+		function a(){
+			var caller = a.caller;
+			console.log(caller);
+		}
+		b();	//b函数对象
+		a();	//null
 
 ----------------------------
 this 对象					|

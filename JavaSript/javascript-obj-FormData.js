@@ -22,11 +22,17 @@ FormData	属性		|
 -----------------------
 FormData	方法		|
 -----------------------
-	append(key,value);
-		* 添加一个键值对
+	append(key,value, filename);
+		* 添加一个数据
+
+		value
+			* 可以是一个文件对象
+		filename 
+			* 可以省略, 表示传给服务器的文件名称
+			* 当一个 Blob 或 File 被作为第二个参数的时候, Blob 对象的默认文件名是 "blob", File 对象的默认文件名是该文件的名称。
 
 	set(key,value);
-		* 添加一个键值对
+		* 跟 append一样
 		* 跟 append() 的区别是，当指定的 key 值存在时，append() 方法是将新增的添加的所以的键值对最后，而set()方法将会覆盖前面的设置的键值对。
 	
 	delete(key);

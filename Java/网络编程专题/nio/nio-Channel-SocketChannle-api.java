@@ -78,7 +78,11 @@ SocketChannel 实例方法		|
 
 	boolean	isBlocking()
 	boolean	isRegistered()
+		* 是否已经注册
+
 	SelectionKey keyFor(Selector sel)
+		* 从指定的Selector获取到key
+
 	SelectorProvider provider()
 	SelectionKey register(Selector sel, int ops, Object att)
 	SelectionKey register(Selector sel,int ops)

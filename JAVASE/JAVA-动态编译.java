@@ -11,26 +11,26 @@ JAVA-动态编译		|
 			Runtime runtime = Runtime.getRuntime();
 			Process process = runtime.exec("javac -cp -D:/MyJava/ HelloWorld.java");
 		2,通过JavaCompiler动态的进行编译(6.0以后引入的新功能)
-			public static int compileFile(String sourceFile){
-				//模拟JAVA源文件地址
-				sourceFile = "E:/MyJava/HelloWorld.java";
-				//获取编译器对象
-				JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-				/*	执行编译操作
-					第一个参数inputStream	:为JAVA编译器提供参数
-					第二个参数outputStream	:得到JAVA编译器的输出信息
-					第三个参数OutputStream	:接收编译器的错误信息
-					第四个参数:可变参数(String[]),能传入一个或者多个JAVA源文件的路径
-					返回值:0表示成功编译,非0表示编译失败
-				*/
-				int result = compiler.run(null,	System.out, System.out, sourceFile);
-				if(result == 0){
-					System.out.println("编译成功");
-				}else{
-					System.out.println("编译失败");
-				}
-				return result;
-			}
+public static int compileFile(String sourceFile){
+	//模拟JAVA源文件地址
+	sourceFile = "E:/MyJava/HelloWorld.java";
+	//获取编译器对象
+	JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+	/*	执行编译操作
+		第一个参数inputStream	:为JAVA编译器提供参数
+		第二个参数outputStream	:得到JAVA编译器的输出信息
+		第三个参数OutputStream	:接收编译器的错误信息
+		第四个参数:可变参数(String[]),能传入一个或者多个JAVA源文件的路径
+		返回值:0表示成功编译,非0表示编译失败
+	*/
+	int result = compiler.run(null,	System.out, System.out, sourceFile);
+	if(result == 0){
+		System.out.println("编译成功");
+	}else{
+		System.out.println("编译失败");
+	}
+	return result;
+}
 
 --------------------
 JAVA-动态运行		|

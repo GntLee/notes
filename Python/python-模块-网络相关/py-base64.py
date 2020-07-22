@@ -29,6 +29,17 @@ base64-模块方法			|
 	
 	bytes urlsafe_b64decode(bytes)
 		* 同上,解码 urlsafe 的Base64 编码
+
+
+------------------------
+base64-Demo				|
+------------------------
+
+# 基本的BASE64编码
+
+	import base64
+	result = base64.b64encode(bytes('admin:888888','UTF_8')).decode('UTF_8')
+	print(result)   # YWRtaW46ODg4ODg4
 	
 
 		

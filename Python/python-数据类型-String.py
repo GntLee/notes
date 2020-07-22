@@ -43,7 +43,7 @@ String				|
 		a = "Kevin"
 		e in a		//true
 		hhh in a	//false
-
+	
 ------------------
 String-格式化输出	|
 ------------------
@@ -78,6 +78,16 @@ String-格式化输出	|
 		* %(name)s
 		* %(age)d
 		print("I'm %(name)s. I'm %(age)d year old" % {'name':'Vamei', 'age':99})
+	
+	# 使用f前缀来格式化
+		name = 'KevinBlandy'
+		age = 23
+		r = f'Hello {name}, Im {age}'
+		print(r)
+
+		* 支持赋值符号 '!s' 和 '!f' ,制定输入结果格式
+
+
 
 ------------------
 方法				|

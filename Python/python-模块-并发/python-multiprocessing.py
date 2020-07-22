@@ -24,6 +24,9 @@ multiprocessing-函数		|
 --------------------------
 	freeze_support()
 		* 在windows下执行,支持windows(我也不晓得这个函数是做啥的)
+	
+	cpu_count()
+		* 返回cup的核心数量
 
 --------------------------
 multiprocessing-Process		|

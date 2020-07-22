@@ -7,6 +7,13 @@
 		* 包含了代表一个元素的特性的Attr对象,仅用于Element节点
 		* 返回 NamedNodeMap 对象
 
+	dataset
+		* 返回的是一个 map,里面包含了节点上的所有 data- 属性
+			let p = document.querySelector('p');
+			console.log(p.dataset); //DOMStringMap {a: "1", b: "2"}
+			console.log(p.dataset.a);   //1
+
+
 	createAttribute();
 		* 创建一个指定名称的属性节点对象
 		* 返回的是一个属性节点对象
@@ -29,7 +36,6 @@
 	
 	hasAttribute();
 		* 判断节点是否具备指定的属性
-
 
 ----------------------
 节点属性-属性			|
